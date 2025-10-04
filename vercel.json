@@ -6,7 +6,7 @@
             "use": "@vercel/node"
         },
         {
-            "src": "client/package.json",
+            "src": "package.json",
             "use": "@vercel/static-build",
             "config": {
                 "distDir": "client/dist"
@@ -16,7 +16,7 @@
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/api"
+            "destination": "/server/index.js"
         },
         {
             "source": "/(.*)",
