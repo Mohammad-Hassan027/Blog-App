@@ -1,0 +1,28 @@
+/* @import url("@tailwindcss/typography"); */
+@import "tailwindcss";
+
+/* @plugin "tailwindcss/typography"; */
+
+.markdown-container h1 {
+  font-size: xx-large;
+  font-weight: 700;
+  padding: 5px;
+}
+
+.markdown-container h2 {
+  font-size: larger;
+  font-weight: 600;
+  padding: 5px;
+}
+
+.markdown-container h3 {
+  font-size: large;
+  font-weight: 500;
+  padding: 5px;
+}
+
+.markdown-container p {
+  margin-bottom: 1em;
+  line-height: 1.6;
+  font-size: 1.1em;
+}
