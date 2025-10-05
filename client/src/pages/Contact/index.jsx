@@ -57,7 +57,7 @@ function ContactPage() {
         <div className="bg-white p-8 rounded-lg shadow-lg dark:shadow-2xl">
           <form action="#" className="space-y-6" method="POST">
             <div>
-              <label className="sr-only" for="name">
+              <label className="sr-only" htmlFor="name">
                 Your Name
               </label>
               <input
@@ -69,7 +69,7 @@ function ContactPage() {
               />
             </div>
             <div>
-              <label className="sr-only" for="email">
+              <label className="sr-only" htmlFor="email">
                 Your Email
               </label>
               <input
@@ -81,7 +81,7 @@ function ContactPage() {
               />
             </div>
             <div>
-              <label className="sr-only" for="subject">
+              <label className="sr-only" htmlFor="subject">
                 Subject
               </label>
               <input
@@ -93,7 +93,7 @@ function ContactPage() {
               />
             </div>
             <div>
-              <label className="sr-only" for="message">
+              <label className="sr-only" htmlFor="message">
                 Your Message
               </label>
               <textarea

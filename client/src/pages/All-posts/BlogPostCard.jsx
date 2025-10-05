@@ -10,13 +10,13 @@ function BlogPostCard({ blog }) {
       <div className="grid md:grid-cols-5 gap-6 md:gap-8 items-start">
         <div className="md:col-span-2">
           <Link
-            className="block aspect-w-16 aspect-h-9 rounded-lg overflow-hidden"
+            className="flex place-content-center aspect-w-16 aspect-h-9 rounded-lg overflow-hidden"
             to={`/post/${postId}`}
           >
             <img
               loading="lazy"
               alt="Post image"
-              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+              className="object-cover transform group-hover:scale-105 transition-transform duration-300"
               src={
                 imageUrl ||
                 "https://lh3.googleusercontent.com/aida-public/AB6AXuCSW3fpuQHfzZWNJ5CzRLVotfQdAFNw9QRX6pKfba9VMeTJp4SaNq6q5UAJiZc9DNDATzW4TcMEkuTQgVRDOxiBbwAVAiOIqyCOBOsmBBzw1cgKvla1Akjh4ZC24LJj3jTR8EVPq5eWsPEMM-d9HB3PRTYtRcBVnsCk-xLZyAF_IWMo3-TPxCnYUEB9anmchrry-KT-El2ZMSbeyVMcl_nM4uBrp1YOdv-n4LA20-7LPwb9LuUzDl7ukunGAt_-jEHJWw4Z--Ckk9ZN"

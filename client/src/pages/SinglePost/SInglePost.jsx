@@ -72,12 +72,16 @@ function SinglePost() {
               {new Date(createdAt).toLocaleString()}
             </p>
           </header>
-          <div
-            className="aspect-video w-full rounded-lg bg-cover bg-center bg-no-repeat"
+          <picture className="aspect-video place-content-center flex">
+            <img className="object-contain" src={imageUrl} alt="image" />
+          </picture>
+
+          {/* <div
+            className="aspect-video w-full rounded-lg bg-cover bg-center bg-no-repeat object-cover"
             style={{
               backgroundImage: `url("${imageUrl}")`,
             }}
-          ></div>
+          ></div> */}
           <div className="prose prose-lg max-w-none markdown-container">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
           </div>
