@@ -22,6 +22,10 @@ router.get("/", async (req, res) => {
 // GET /api/blogs/my-posts - list all posts for the logged in user (drafts and published)
 router.get("/my-posts", firebaseAuth, async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized: No user logged in" });
+    }
+
     const blogs = await Blog.find({
       author: { $in: [req.user.name, req.user.email] },
     })
