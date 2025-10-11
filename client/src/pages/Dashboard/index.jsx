@@ -59,17 +59,17 @@ function DashBoard() {
   };
 
   return (
-    <main className="flex flex-1 justify-center py-8">
+    <main className="flex justify-center flex-1 py-8">
       <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <h1 className="text-3xl sm:text-4xl font-bold">Dashboard</h1>
-          <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-4">
+        <div className="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
+          <h1 className="text-3xl font-bold sm:text-4xl">Dashboard</h1>
+          <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:gap-4">
             <div className="relative w-full sm:max-w-xs">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+              <span className="absolute text-gray-400 -translate-y-1/2 material-symbols-outlined left-3 top-1/2">
                 <CiSearch />
               </span>
               <input
-                className="w-full rounded-lg border border-gray-200/80 bg-background-light py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:ring-blue-500"
+                className="w-full py-2 pl-10 pr-4 text-sm border rounded-lg border-gray-200/80 bg-background-light focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Search posts..."
                 type="text"
                 value={searchTerm}
@@ -78,7 +78,7 @@ function DashBoard() {
             </div>
             <div className="relative w-full sm:w-auto">
               <select
-                className="w-full appearance-none rounded-lg border border-gray-200/80 bg-background-light py-2 pl-3 pr-8 text-sm focus:border-blue-500 focus:ring-blue-500"
+                className="w-full py-2 pl-3 pr-8 text-sm border rounded-lg appearance-none border-gray-200/80 bg-background-light focus:border-blue-500 focus:ring-blue-500"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
               >
@@ -87,14 +87,14 @@ function DashBoard() {
                 <option value="title-asc">Title (A-Z)</option>
                 <option value="title-desc">Title (Z-A)</option>
               </select>
-              <span className="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+              <span className="absolute text-gray-400 -translate-y-1/2 pointer-events-none material-symbols-outlined right-2 top-1/2">
                 <MdExpandMore />
               </span>
             </div>
           </div>
         </div>
         <div className="mb-4 border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+          <nav className="flex -mb-px space-x-8" aria-label="Tabs">
             <button
               onClick={() => setActiveTab("published")}
               className={`${
@@ -117,7 +117,7 @@ function DashBoard() {
             </button>
           </nav>
         </div>
-        <div className="overflow-x-auto rounded-lg border border-gray-200/80 bg-blue-50">
+        <div className="overflow-x-auto border rounded-lg border-gray-200/80 bg-blue-50">
           <table className="w-full min-w-[640px] text-left">
             <thead className="border-b border-gray-200/80 bg-gray-50">
               <tr>
@@ -140,7 +140,7 @@ function DashBoard() {
                 <tr>
                   <td
                     colSpan="4"
-                    className="px-6 py-4 text-center text-sm text-gray-600"
+                    className="px-6 py-4 text-sm text-center text-gray-600"
                   >
                     <Loader />
                   </td>
@@ -149,7 +149,7 @@ function DashBoard() {
                 <tr>
                   <td
                     colSpan="4"
-                    className="px-6 py-4 text-center text-sm text-red-600"
+                    className="px-6 py-4 text-sm text-center text-red-600"
                   >
                     {error}
                   </td>
@@ -158,7 +158,7 @@ function DashBoard() {
                 <tr>
                   <td
                     colSpan="4"
-                    className="px-6 py-4 text-center text-sm text-gray-600"
+                    className="px-6 py-4 text-sm text-center text-gray-600"
                   >
                     No posts found
                   </td>
@@ -178,7 +178,7 @@ function DashBoard() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4 text-sm font-medium">
                         <a
-                          className="text-blue-500 hover:underline cursor-pointer"
+                          className="text-blue-500 cursor-pointer hover:underline"
                           onClick={() =>
                             navigate(`/post/${blog._id || blog.id}`)
                           }
@@ -186,13 +186,13 @@ function DashBoard() {
                           View
                         </a>
                         <a
-                          className="text-yellow-600 hover:underline cursor-pointer"
+                          className="text-yellow-600 cursor-pointer hover:underline"
                           onClick={() => handleEdit(blog._id || blog.id)}
                         >
                           Edit
                         </a>
                         <a
-                          className="text-red-600 hover:underline cursor-pointer"
+                          className="text-red-600 cursor-pointer hover:underline"
                           onClick={() => handleDelete(blog._id || blog.id)}
                         >
                           Delete

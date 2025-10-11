@@ -40,7 +40,7 @@ function SinglePost() {
 
   if (!currentBlog) {
     return (
-      <div className="flex item-center justify-center">
+      <div className="flex justify-center item-center">
         <Loader />
       </div>
     );
@@ -52,8 +52,8 @@ function SinglePost() {
   const displayedComments =
     comments && comments.length > 0 ? comments : currentBlog.comments || [];
   return (
-    <main className="w-full flex-1">
-      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
+    <main className="flex-1 w-full">
+      <div className="max-w-3xl px-4 py-8 mx-auto sm:px-6 sm:py-12">
         <article className="flex flex-col gap-6">
           <header>
             <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -72,12 +72,12 @@ function SinglePost() {
               {new Date(createdAt).toLocaleString()}
             </p>
           </header>
-          <picture className="aspect-video place-content-center flex">
+          <picture className="flex aspect-video place-content-center">
             <img className="object-contain" src={imageUrl} alt="image" />
           </picture>
 
           {/* <div
-            className="aspect-video w-full rounded-lg bg-cover bg-center bg-no-repeat object-cover"
+            className="object-cover w-full bg-center bg-no-repeat bg-cover rounded-lg aspect-video"
             style={{
               backgroundImage: `url("${imageUrl}")`,
             }}
@@ -86,7 +86,7 @@ function SinglePost() {
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
           </div>
 
-          <footer className="mt-6 flex items-center gap-4 border-t border-gray-200 pt-6">
+          <footer className="flex items-center gap-4 pt-6 mt-6 border-t border-gray-200">
             <button className="flex items-center gap-2 rounded-lg bg-blue-500/10 px-3 py-1.5 text-sm font-medium text-blue-500 hover:bg-blue-500/20 ">
               <svg
                 fill="currentColor"
@@ -127,7 +127,7 @@ function SinglePost() {
         </article>
         <section className="mt-12">
           <h2 className="text-2xl font-bold text-gray-900">Comments</h2>
-          <div className="mt-6 flex flex-col gap-6">
+          <div className="flex flex-col gap-6 mt-6">
             {displayedComments.length === 0 ? (
               <p className="text-sm text-gray-500">
                 No comments yet. Be the first to comment.
@@ -141,7 +141,7 @@ function SinglePost() {
                   }`}
                 >
                   <div
-                    className="h-10 w-10 shrink-0 rounded-full bg-cover bg-center bg-no-repeat"
+                    className="w-10 h-10 bg-center bg-no-repeat bg-cover rounded-full shrink-0"
                     style={{
                       backgroundImage: c.avatar
                         ? `url("${c.avatar}")`
@@ -173,9 +173,9 @@ function SinglePost() {
               ))
             )}
           </div>
-          <div className="mt-8 flex items-start gap-3">
+          <div className="flex items-start gap-3 mt-8">
             <div
-              className="h-10 w-10 shrink-0 rounded-full bg-cover bg-center bg-no-repeat"
+              className="w-10 h-10 bg-center bg-no-repeat bg-cover rounded-full shrink-0"
               style={{
                 backgroundImage:
                   user && user.photoURL
@@ -190,18 +190,18 @@ function SinglePost() {
                   // allow editing name only when not logged in
                   if (!user) setCommentAuthor(e.target.value);
                 }}
-                className="mb-2 rounded-md border-gray-300 p-2 text-sm"
+                className="p-2 mb-2 text-sm border-gray-300 rounded-md"
                 placeholder={user ? "Signed in user" : "Your name (optional)"}
                 readOnly={!!user}
               />
               <textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                className="form-textarea w-full resize-none rounded-lg border-gray-300 bg-white p-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50"
+                className="w-full p-3 text-base text-gray-900 placeholder-gray-500 bg-white border-gray-300 rounded-lg shadow-sm resize-none form-textarea focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50"
                 placeholder="Add a comment..."
                 rows="3"
               ></textarea>
-              <div className="mt-2 flex justify-end">
+              <div className="flex justify-end mt-2">
                 <button
                   onClick={() => {
                     const text = commentText.trim();
@@ -212,7 +212,7 @@ function SinglePost() {
                     setCommentText("");
                     if (!user) setCommentAuthor("");
                   }}
-                  className="h-9 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-blue-500 px-4 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-105 active:scale-95"
+                  className="items-center justify-center px-4 overflow-hidden text-sm font-semibold text-white transition-transform bg-blue-500 rounded-lg shadow-sm cursor-pointer h-9 hover:scale-105 active:scale-95"
                 >
                   Post Comment
                 </button>

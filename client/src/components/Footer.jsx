@@ -3,14 +3,14 @@ import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className="bg-linear-to-b from-white to-blue-50 border-t border-gray-200/80 dark:from-gray-900 dark:to-gray-800 dark:border-gray-700/50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="border-t bg-linear-to-b from-white to-blue-50 border-gray-200/80 dark:from-gray-900 dark:to-gray-800 dark:border-gray-700/50">
+      <div className="container px-4 py-12 mx-auto sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* Brand section */}
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-3 mb-4">
               <svg
-                className="h-8 w-8 text-blue-500"
+                className="w-8 h-8 text-blue-500"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +25,7 @@ function Footer() {
                 Bloggr
               </h2>
             </Link>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
               Share your stories, ideas, and expertise with the world.
             </p>
             <div className="flex gap-4">
@@ -33,7 +33,7 @@ function Footer() {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-500 transition-colors"
+                className="text-gray-600 transition-colors hover:text-blue-500"
                 aria-label="GitHub"
               >
                 <FaGithub size={20} />
@@ -42,7 +42,7 @@ function Footer() {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-500 transition-colors"
+                className="text-gray-600 transition-colors hover:text-blue-500"
                 aria-label="Twitter"
               >
                 <FaTwitter size={20} />
@@ -51,7 +51,7 @@ function Footer() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-500 transition-colors"
+                className="text-gray-600 transition-colors hover:text-blue-500"
                 aria-label="LinkedIn"
               >
                 <FaLinkedin size={20} />
@@ -61,14 +61,14 @@ function Footer() {
 
           {/* Quick Links */}
           <div className="md:col-span-1">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100 mb-4">
+            <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-gray-100">
               Quick Links
             </h3>
             <ul className="space-y-3">
               <li>
                 <Link
                   to="/"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Home
                 </Link>
@@ -76,7 +76,7 @@ function Footer() {
               <li>
                 <Link
                   to="/about"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   About Us
                 </Link>
@@ -84,7 +84,7 @@ function Footer() {
               <li>
                 <Link
                   to="/contact"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Contact
                 </Link>
@@ -92,7 +92,7 @@ function Footer() {
               <li>
                 <Link
                   to="/all-posts"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   All Posts
                 </Link>
@@ -102,14 +102,14 @@ function Footer() {
 
           {/* Categories */}
           <div className="md:col-span-1">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100 mb-4">
+            <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-gray-100">
               Categories
             </h3>
             <ul className="space-y-3">
               <li>
                 <a
                   href="#"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Technology
                 </a>
@@ -117,7 +117,7 @@ function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Programming
                 </a>
@@ -125,7 +125,7 @@ function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   AI & Machine Learning
                 </a>
@@ -133,7 +133,7 @@ function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Web Development
                 </a>
@@ -143,14 +143,14 @@ function Footer() {
 
           {/* Legal */}
           <div className="md:col-span-1">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100 mb-4">
+            <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-gray-100">
               Legal
             </h3>
             <ul className="space-y-3">
               <li>
                 <a
                   href="#"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Privacy Policy
                 </a>
@@ -158,7 +158,7 @@ function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Terms of Service
                 </a>
@@ -166,7 +166,7 @@ function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Cookie Policy
                 </a>
@@ -174,7 +174,7 @@ function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-gray-600 hover:text-blue-500 transition-colors text-sm"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   GDPR
                 </a>
@@ -184,8 +184,8 @@ function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-8 border-t border-gray-200/80 dark:border-gray-700/50">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-2">
+        <div className="pt-8 mt-12 border-t border-gray-200/80 dark:border-gray-700/50">
+          <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Photos: Unsplash —
               <a
@@ -207,7 +207,7 @@ function Footer() {
               </a>
             </p>
 
-            <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-center text-gray-600 dark:text-gray-400">
               © {new Date().getFullYear()} Bloggr. All rights reserved.
             </p>
           </div>

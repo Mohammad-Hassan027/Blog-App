@@ -3,10 +3,10 @@ import { MdOutlineGroup } from "react-icons/md";
 
 function ContactPage() {
   return (
-    <main className="grow container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-      <div className="grid md:grid-cols-2 gap-16">
+    <main className="container px-4 py-12 mx-auto grow sm:px-6 lg:px-8 md:py-20">
+      <div className="grid gap-16 md:grid-cols-2">
         <div className="flex flex-col justify-center">
-          <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="text-4xl font-bold leading-tight md:text-5xl">
             Get in Touch
           </h2>
           <p className="mt-4 text-lg text-black/60">
@@ -17,7 +17,7 @@ function ContactPage() {
           <div className="mt-12 space-y-6">
             <div className="flex items-start gap-4">
               <div className="shrink-0">
-                <span className="material-symbols-outlined text-blue-500 text-2xl">
+                <span className="text-2xl text-blue-500 material-symbols-outlined">
                   <CiMail />
                 </span>
               </div>
@@ -33,7 +33,7 @@ function ContactPage() {
             </div>
             <div className="flex items-start gap-4">
               <div className="shrink-0">
-                <span className="material-symbols-outlined text-blue-500 text-2xl">
+                <span className="text-2xl text-blue-500 material-symbols-outlined">
                   <MdOutlineGroup />
                 </span>
               </div>
@@ -54,14 +54,14 @@ function ContactPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white p-8 rounded-lg shadow-lg dark:shadow-2xl">
+        <div className="p-8 bg-white rounded-lg shadow-lg dark:shadow-2xl">
           <form action="#" className="space-y-6" method="POST">
             <div>
               <label className="sr-only" htmlFor="name">
                 Your Name
               </label>
               <input
-                className="form-input w-full bg-blue-50border-black/20 dark:border-white/20 rounded-lg py-3 px-4 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-lg form-input bg-blue-50border-black/20 dark:border-white/20 focus:border-blue-500 focus:ring-blue-500"
                 id="name"
                 name="name"
                 placeholder="Your Name"
@@ -73,7 +73,7 @@ function ContactPage() {
                 Your Email
               </label>
               <input
-                className="form-input w-full bg-blue-50border-black/20 dark:border-white/20 rounded-lg py-3 px-4 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-lg form-input bg-blue-50border-black/20 dark:border-white/20 focus:border-blue-500 focus:ring-blue-500"
                 id="email"
                 name="email"
                 placeholder="Your Email"
@@ -85,7 +85,7 @@ function ContactPage() {
                 Subject
               </label>
               <input
-                className="form-input w-full bg-blue-50border-black/20 dark:border-white/20 rounded-lg py-3 px-4 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-lg form-input bg-blue-50border-black/20 dark:border-white/20 focus:border-blue-500 focus:ring-blue-500"
                 id="subject"
                 name="subject"
                 placeholder="Subject"
@@ -97,7 +97,7 @@ function ContactPage() {
                 Your Message
               </label>
               <textarea
-                className="form-input w-full bg-blue-50border-black/20 dark:border-white/20 rounded-lg py-3 px-4 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-lg form-input bg-blue-50border-black/20 dark:border-white/20 focus:border-blue-500 focus:ring-blue-500"
                 id="message"
                 name="message"
                 placeholder="Your Message"
@@ -106,7 +106,7 @@ function ContactPage() {
             </div>
             <div>
               <button
-                className="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-500/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-background-light transition-colors"
+                className="w-full px-6 py-3 font-bold text-white transition-colors bg-blue-500 rounded-lg hover:bg-blue-500/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-background-light"
                 type="submit"
               >
                 Send Message

@@ -21,7 +21,7 @@ export function PrivateRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="flex item-center justify-center">
+      <div className="flex justify-center item-center">
         <Loader />
       </div>
     );
@@ -40,7 +40,7 @@ export function AuthRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="flex item-center justify-center">
+      <div className="flex justify-center item-center">
         <Loader />
       </div>
     );

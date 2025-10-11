@@ -6,7 +6,7 @@ function Layout() {
   return (
     <div>
       <Header />
-      <div className="max-w-8xl mx-auto py-10 px-4">
+      <div className="px-4 py-10 mx-auto max-w-8xl">
         <Outlet />
       </div>
       <Footer />

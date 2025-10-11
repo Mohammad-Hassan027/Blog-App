@@ -38,18 +38,18 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="flex flex-col justify-center min-h-screen py-12 bg-gray-100 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
           Your Profile
         </h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {(error || formError) && (
-              <div className="bg-red-50 border-l-4 border-red-400 p-4">
+              <div className="p-4 border-l-4 border-red-400 bg-red-50">
                 <p className="text-sm text-red-700">{error || formError}</p>
               </div>
             )}
@@ -70,7 +70,7 @@ export default function Profile() {
                   required
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
             </div>
@@ -82,7 +82,7 @@ export default function Profile() {
               >
                 Profile Picture URL
               </label>
-              <div className="mt-1 flex items-center">
+              <div className="flex items-center mt-1">
                 <input
                   id="photoURL"
                   name="photoURL"
@@ -90,7 +90,7 @@ export default function Profile() {
                   autoComplete="photo"
                   value={photoURL}
                   onChange={(e) => setPhotoURL(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
                 <input
                   type="file"
@@ -113,7 +113,7 @@ export default function Profile() {
                   <img
                     src={photoURL}
                     alt="Profile Preview"
-                    className="h-20 w-20 rounded-full object-cover"
+                    className="object-cover w-20 h-20 rounded-full"
                   />
                 </div>
               )}

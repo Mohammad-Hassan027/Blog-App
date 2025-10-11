@@ -15,24 +15,24 @@ function Home() {
     <main className="grow">
       <section className="relative py-12 sm:py-24 lg:py-32">
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-center bg-cover"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&w=1600&q=60')",
           }}
         ></div>
         <div className="absolute inset-0 bg-black/50"></div>
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+        <div className="container relative px-4 mx-auto text-center text-white sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
             Explore the Future of Technology
           </h1>
-          <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-300">
+          <p className="max-w-2xl mx-auto mt-6 text-lg text-gray-300">
             Dive into the latest trends, insights, and innovations shaping our
             digital world. From AI to cybersecurity, we've got you covered.
           </p>
           <div className="mt-10">
             <Link
-              className="inline-block px-8 py-3 text-base font-medium rounded-lg bg-blue-500 text-white hover:bg-blue-500/90 transition-transform transform hover:scale-105"
+              className="inline-block px-8 py-3 text-base font-medium text-white transition-transform transform bg-blue-500 rounded-lg hover:bg-blue-500/90 hover:scale-105"
               to={"/all-posts"}
             >
               Browse All Posts
@@ -41,8 +41,8 @@ function Home() {
         </div>
       </section>
       <section className="py-16 sm:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-12">
+        <div className="container px-4 mx-auto sm:px-6 lg:px-8">
+          <h2 className="mb-12 text-3xl font-bold tracking-tight text-gray-900">
             Featured Post
           </h2>
           <div className="@container">
@@ -84,7 +84,7 @@ function Home() {
                 <img
                   loading="lazy"
                   alt="Abstract image representing quantum computing"
-                  className="w-full h-full object-cover rounded-lg"
+                  className="object-cover w-full h-full rounded-lg"
                   src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=60"
                 />
               </div>
@@ -93,13 +93,13 @@ function Home() {
         </div>
       </section>
       <section className="py-16 sm:py-24 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
+        <div className="container px-4 mx-auto sm:px-6 lg:px-8">
+          <div className="flex flex-col items-start justify-between mb-12 md:flex-row md:items-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900">
               Latest Posts
             </h2>
             <Link
-              className="mt-2 md:mt-0 text-sm font-medium text-blue-500 hover:underline flex items-center gap-1"
+              className="flex items-center gap-1 mt-2 text-sm font-medium text-blue-500 md:mt-0 hover:underline"
               to={"/all-posts"}
             >
               View all posts
@@ -120,7 +120,7 @@ function Home() {
               </svg>
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {blogs &&
               blogs.map((blog) => (
                 <BlogCard blog={blog} key={blog._id || blog.id} />

@@ -39,11 +39,11 @@ function Header() {
 
   return (
     <header className="border-b border-[#e3e8ed]/20 dark:border-[#e3e8ed]/10 px-4 sm:px-6 lg:px-8 py-4">
-      <div className="mx-auto flex max-w-8xl items-center justify-between">
+      <div className="flex items-center justify-between mx-auto max-w-8xl">
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-3">
             <svg
-              className="h-6 w-6 text-blue-500"
+              className="w-6 h-6 text-blue-500"
               fill="none"
               viewBox="0 0 48 48"
               xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +56,7 @@ function Header() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="items-center hidden gap-6 md:flex">
             <Link className="text-sm font-medium hover:text-blue-500" to="/">
               Home
             </Link>
@@ -84,11 +84,11 @@ function Header() {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden p-2 rounded-md"
+            className="p-2 rounded-md md:hidden"
             aria-label="Toggle menu"
             onClick={() => setMobileOpen((s) => !s)}
           >
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
               <path
                 d={
                   mobileOpen
@@ -107,7 +107,7 @@ function Header() {
             <>
               <Link
                 to="/create"
-                className="hidden sm:inline-block rounded bg-blue-500 px-3 sm:px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-blue-500/90"
+                className="hidden px-3 py-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm sm:inline-block sm:px-4 hover:bg-blue-500/90"
               >
                 New Post
               </Link>
@@ -117,12 +117,12 @@ function Header() {
                   aria-haspopup="true"
                   aria-expanded={menuOpen}
                   onClick={() => setMenuOpen((s) => !s)}
-                  className="h-10 w-10 rounded-full bg-cover bg-center focus:ring-2 focus:ring-blue-300"
+                  className="w-10 h-10 bg-center bg-cover rounded-full focus:ring-2 focus:ring-blue-300"
                   style={{ backgroundImage: `url("${avatarUrl}")` }}
                 />
 
                 {menuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-20">
+                  <div className="absolute right-0 z-20 w-56 py-1 mt-2 bg-white rounded-md shadow-lg">
                     <div className="px-4 py-2 text-sm text-gray-700 border-b">
                       {user.displayName || user.email}
                     </div>
@@ -143,7 +143,7 @@ function Header() {
 
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+                      className="w-full px-4 py-2 text-sm text-left text-red-700 hover:bg-red-50"
                     >
                       Sign out
                     </button>
@@ -154,7 +154,7 @@ function Header() {
           ) : (
             <Link
               to="/login"
-              className="rounded bg-blue-500 px-3 sm:px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-blue-500/90"
+              className="px-3 py-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm sm:px-4 hover:bg-blue-500/90"
             >
               Sign In
             </Link>
@@ -164,7 +164,7 @@ function Header() {
 
       {/* Mobile menu panel */}
       {mobileOpen && (
-        <div className="md:hidden px-4 pt-2 pb-4 border-t">
+        <div className="px-4 pt-2 pb-4 border-t md:hidden">
           <nav className="flex flex-col gap-2">
             <Link to="/" className="text-sm font-medium hover:text-blue-500">
               Home
@@ -193,7 +193,7 @@ function Header() {
             {user ? (
               <Link
                 to="/create"
-                className="mt-2 inline-block rounded bg-blue-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-blue-500/90"
+                className="inline-block px-3 py-2 mt-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm hover:bg-blue-500/90"
                 onClick={() => setMobileOpen(false)}
               >
                 New Post
@@ -201,7 +201,7 @@ function Header() {
             ) : (
               <Link
                 to="/login"
-                className="mt-2 inline-block rounded bg-blue-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-blue-500/90"
+                className="inline-block px-3 py-2 mt-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm hover:bg-blue-500/90"
                 onClick={() => setMobileOpen(false)}
               >
                 Sign In

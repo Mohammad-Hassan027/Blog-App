@@ -82,11 +82,11 @@ function CreatePost() {
 
   return (
     <>
-      <main className="flex-1 py-6 sm:py-10 md:py-18 shadow-2xl rounded-2xl">
-        <div className="mx-auto max-w-xl px-4">
+      <main className="flex-1 py-6 shadow-2xl sm:py-10 md:py-18 rounded-2xl">
+        <div className="max-w-xl px-4 mx-auto">
           <div className="space-y-6 md:space-y-8">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 Create a New Post
               </h1>
               <p className="mt-2 text-[#566879] dark:text-[#a0a9b4]">
@@ -104,7 +104,7 @@ function CreatePost() {
                 <label className="text-sm font-medium" htmlFor="tags">
                   Tags
                 </label>
-                <div className="flex gap-2 items-center flex-wrap">
+                <div className="flex flex-wrap items-center gap-2">
                   <select
                     id="tags"
                     className="form-select rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500"
@@ -131,7 +131,7 @@ function CreatePost() {
                     {tags.map((tag) => (
                       <span
                         key={tag}
-                        className="inline-flex items-center rounded bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700"
+                        className="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded"
                       >
                         {tag}
                         <button
@@ -166,10 +166,10 @@ function CreatePost() {
               </div>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium mb-1 block">
+                  <label className="block mb-1 text-sm font-medium">
                     Post Image
                   </label>
-                  <div className="flex gap-2 items-start">
+                  <div className="flex items-start gap-2">
                     <div className="flex-1">
                       <input
                         className="form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500"
@@ -227,7 +227,7 @@ function CreatePost() {
                     <img
                       src={imagePreview}
                       alt="Preview"
-                      className="max-h-48 w-full rounded object-cover"
+                      className="object-cover w-full rounded max-h-48"
                       onError={() => setImagePreview("")}
                     />
                   </div>

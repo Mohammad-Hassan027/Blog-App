@@ -4,11 +4,11 @@ function BlogCard({ blog }) {
   const { title, description, createdAt } = blog;
   const postId = blog._id || blog.id;
   return (
-    <div className="bg-blue-50 p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col">
+    <div className="flex flex-col p-6 transition-shadow duration-300 shadow-md bg-blue-50 rounded-xl hover:shadow-xl">
       <span className="text-sm text-gray-500">
         {new Date(createdAt).toLocaleDateString()}
       </span>
-      <h3 className="text-xl font-bold mt-2 text-gray-900">
+      <h3 className="mt-2 text-xl font-bold text-gray-900">
         {title || "AI in Software Development"}
       </h3>
       <p className="mt-2 text-gray-600 grow">
@@ -16,7 +16,7 @@ function BlogCard({ blog }) {
           "How artificial intelligence is changing the game for developers, from code generation to automated testing."}
       </p>
       <Link
-        className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-500 hover:underline"
+        className="inline-flex items-center gap-2 mt-4 text-sm font-medium text-blue-500 hover:underline"
         to={`/post/${postId}`}
       >
         Read More
