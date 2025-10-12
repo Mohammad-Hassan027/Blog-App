@@ -23,7 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-env
+
 /config/firebase-service-account.json
 /config/blog-app-e289a-firebase-adminsdk-fbsvc-6cb1b4187b.json
+
 .env
