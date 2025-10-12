@@ -10,10 +10,24 @@ const upload = multer({ dest: "/tmp/uploads" });
 // GET /api/blogs - list all PUBLISHED blogs for public view
 router.get("/", async (req, res) => {
   try {
-    const blogs = await Blog.find({ status: "published" })
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const filter = { status: "published" };
+    const totalPosts = await Blog.countDocuments(filter);
+    const blogs = await Blog.find(filter)
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .lean();
-    res.json(blogs);
+
+    res.json({
+      blogs,
+      totalPosts,
+      currentPage: page,
+      totalPages: Math.ceil(totalPosts / limit),
+    });
+    
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch blogs" });
   }

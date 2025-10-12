@@ -8,16 +8,20 @@ const useBlogStore = create((set, get) => ({
   blogs: [],
   currentBlog: null,
   loading: false,
+  totalPosts: 0,
+  currentPage: 1,
+  totalPages: 1,
   error: null,
 
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
 
-  fetchBlogs: async () => {
+  fetchBlogs: async (page = 1, limit = 6) => {
     try {
       set({ loading: true, error: null });
-      const blogs = await postApi.getAllPosts();
-      set({ blogs, loading: false });
+      const { blogs, totalPosts, currentPage, totalPages } =
+        await postApi.getAllPosts(page, limit);
+      set({ blogs, totalPosts, currentPage, totalPages, loading: false });
     } catch (error) {
       console.error("Failed to fetch blogs:", error);
       set({ error: error.message, loading: false });

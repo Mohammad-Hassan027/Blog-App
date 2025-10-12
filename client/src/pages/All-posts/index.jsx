@@ -4,18 +4,31 @@ import { HiChevronRight } from "react-icons/hi2";
 import { HiChevronLeft } from "react-icons/hi2";
 import BlogPostCard from "./BlogPostCard";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useBlogStore from "../../store/useBlogStore";
 
 function AllPostsPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+
   const blogs = useBlogStore((s) => s.blogs);
+
   const fetchBlogs = useBlogStore((s) => s.fetchBlogs);
+  const currentPage = useBlogStore((s) => s.currentPage);
+  const totalPages = useBlogStore((s) => s.totalPages);
+  const loading = useBlogStore((s) => s.loading);
+  const error = useBlogStore((s) => s.error);
+
+  const filteredBlogs = [...(blogs || [])].filter(
+    (blog) =>
+      blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.author?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
-    if (blogs.length === 0) {
+    if (filteredBlogs.length === 0 || currentPage === 0) {
       fetchBlogs();
     }
-  }, [blogs.length, fetchBlogs]);
+  }, [filteredBlogs.length, fetchBlogs]);
 
   return (
     <main className="container px-4 py-8 mx-auto grow sm:px-6 lg:px-8 md:py-12">
@@ -34,6 +47,8 @@ function AllPostsPage() {
               className="w-full py-3 pl-10 pr-4 text-lg transition-colors rounded-full bg-blue-50border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search posts..."
               type="search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -68,59 +83,83 @@ function AllPostsPage() {
             </div>
           </div>
         </div>
-        <div className="space-y-12">
-          {blogs &&
-            blogs.map((blog) => (
-              <BlogPostCard blog={blog} key={blog._id || blog.id} />
-            ))}
-        </div>
-        <div className="flex justify-center mt-12">
-          <nav aria-label="Pagination" className="flex items-center space-x-2">
-            <Link
-              className="inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200"
-              to={"#"}
-            >
-              <span className="material-symbols-outlined">
-                <HiChevronLeft />
-              </span>
-            </Link>
-            <Link
-              className="inline-flex items-center justify-center w-10 h-10 font-medium text-white bg-blue-500 rounded-full"
-              to={"#"}
-            >
-              1
-            </Link>
-            <Link
-              className="inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full text-slate-600 dark:text-slate-400 hover:bg-slate-200 hover:text-blue-500 dark:hover:text-blue-500"
-              to={"#"}
-            >
-              2
-            </Link>
-            <Link
-              className="inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full text-slate-600 dark:text-slate-400 hover:bg-slate-200 hover:text-blue-500 dark:hover:text-blue-500"
-              to={"#"}
-            >
-              3
-            </Link>
-            <span className="inline-flex items-center justify-center w-10 h-10 text-slate-500 dark:text-slate-400">
-              ...
-            </span>
-            <Link
-              className="inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full text-slate-600 dark:text-slate-400 hover:bg-slate-200 hover:text-blue-500 dark:hover:text-blue-500"
-              to={"#"}
-            >
-              10
-            </Link>
-            <Link
-              className="inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200"
-              to={"#"}
-            >
-              <span className="material-symbols-outlined">
-                <HiChevronRight />
-              </span>
-            </Link>
-          </nav>
-        </div>
+
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <div className="loader" />
+          </div>
+        ) : error ? (
+          <p className="text-center text-red-500">
+            {" "}
+            Error fetching posts: {error}
+          </p>
+        ) : (
+          <>
+            <div className="space-y-12">
+              {filteredBlogs &&
+                filteredBlogs.map((blog) => (
+                  <BlogPostCard blog={blog} key={blog._id || blog.id} />
+                ))}
+            </div>
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-12">
+                {" "}
+                <nav
+                  aria-label="Pagination"
+                  className="flex items-center space-x-2"
+                >
+                  {/* Previous Button */}
+                  <button
+                    className={`inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full ${
+                      currentPage > 1
+                        ? "text-slate-500 hover:bg-slate-200"
+                        : "text-slate-300 cursor-not-allowed"
+                    }`}
+                    onClick={() => fetchBlogs(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    {/* &larr; */}
+                    <span className="material-symbols-outlined">
+                      <HiChevronLeft />
+                    </span>
+                  </button>
+
+                  {/* Page Numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (pageNumber) => (
+                      <button
+                        key={pageNumber}
+                        className={`inline-flex items-center justify-center w-10 h-10 font-medium rounded-full transition-colors ${
+                          pageNumber === currentPage
+                            ? "text-white bg-blue-500"
+                            : "text-slate-600 hover:bg-slate-200"
+                        }`}
+                        onClick={() => fetchBlogs(pageNumber)}
+                      >
+                        {pageNumber}
+                      </button>
+                    )
+                  )}
+                  {/* Next Button */}
+                  <button
+                    className={`inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full ${
+                      currentPage < totalPages
+                        ? "text-slate-500 hover:bg-slate-200"
+                        : "text-slate-300 cursor-not-allowed"
+                    }`}
+                    onClick={() => fetchBlogs(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    {/* &rarr; */}
+                    <span className="material-symbols-outlined">
+                      <HiChevronRight />
+                    </span>
+                  </button>
+                </nav>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </main>
   );

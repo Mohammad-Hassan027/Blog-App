@@ -1,8 +1,9 @@
 import { fetchWithAuth } from "./api";
 
-export async function getAllPosts() {
+export async function getAllPosts(page, limit) {
   // This fetches only PUBLISHED posts for public pages
-  return fetchWithAuth("/api/blogs");
+  const query = (page || limit) ? `?page=${page || 1}&limit=${limit || 10}` : '';
+  return fetchWithAuth(`/api/blogs${query}`);
 }
 
 export async function getMyPosts() {
