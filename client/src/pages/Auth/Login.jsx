@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function Login() {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, signInWithGoogle, error, clearError } = useAuthStore();

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
 import useBlogStore from "../../store/useBlogStore";
 import { uploadToCloudinary } from "../../utils/cloudinary";
+import MarkdownRules from "../../components/MarkdownRules";
+import MarkdownEditor from "../../components/MarkdownEditor";
 
 function CreatePost() {
   const navigate = useNavigate();
@@ -173,7 +175,7 @@ function CreatePost() {
                     <div className="flex-1">
                       <input
                         className="form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500"
-                        type="url"
+                        type="url"  A 
                         placeholder="Enter image URL or upload a file"
                         value={imageUrl}
                         onChange={(e) => {
@@ -233,19 +235,10 @@ function CreatePost() {
                   </div>
                 )}
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium" htmlFor="content">
-                  Content (Markdown supported)
-                </label>
-                <textarea
-                  className="form-textarea min-h-[200px] sm:min-h-48 w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 "
-                  id="content"
-                  placeholder="Write your blog post here..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  required
-                ></textarea>
-              </div>
+              <MarkdownEditor
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
@@ -270,6 +263,7 @@ function CreatePost() {
               </div>
             </form>
           </div>
+          <MarkdownRules />
         </div>
       </main>
     </>

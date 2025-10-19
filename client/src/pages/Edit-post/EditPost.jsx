@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
 import useBlogStore from "../../store/useBlogStore";
 import { uploadToCloudinary } from "../../utils/cloudinary";
+import MarkdownRules from "../../components/MarkdownRules";
 
 function EditPost() {
   const { id } = useParams();
@@ -290,6 +291,7 @@ function EditPost() {
               </div>
             </form>
           </div>
+          <MarkdownRules />
         </div>
       </main>
     </>
