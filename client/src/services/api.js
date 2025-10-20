@@ -6,10 +6,14 @@ export async function fetchWithAuth(endpoint, options = {}) {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  const headers = {
-    "Content-Type": "application/json",
+  let headers = {
     ...options.headers,
   };
+
+  // Only set Content-Type: application/json if we're not sending FormData
+  if (!(options.body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
 
   if (user) {
     const token = await user.getIdToken();
@@ -26,5 +30,11 @@ export async function fetchWithAuth(endpoint, options = {}) {
     throw new Error(error.message || "Network response was not ok");
   }
 
+  // Return null for 204 No Content (e.g., successful DELETE)
+  if (response.status === 204) {
+    return null;
+  }
+
+  // Otherwise parse JSON response
   return response.json();
 }

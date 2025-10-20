@@ -1,11 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const Blog = require("../models/Blog");
+const Comment = require("../models/Comment");
 const multer = require("multer");
-const { uploadImage } = require("../utils/cloudinary");
+const { cloudinary, uploadImage } = require("../utils/cloudinary");
 const { firebaseAuth } = require("../middleware/authFirebase");
+const path = require("path");
+const os = require("os");
+const fs = require("fs");
 
-const upload = multer({ dest: "/tmp/uploads" });
+// Ensure cross-platform temporary upload directory
+const tmpDir = path.join(os.tmpdir(), "blog-app-uploads");
+if (!fs.existsSync(tmpDir)) {
+  fs.mkdirSync(tmpDir, { recursive: true });
+}
+
+const upload = multer({ dest: tmpDir });
 
 // GET /api/blogs - list all PUBLISHED blogs for public view
 router.get("/", async (req, res) => {
@@ -27,7 +37,6 @@ router.get("/", async (req, res) => {
       currentPage: page,
       totalPages: Math.ceil(totalPosts / limit),
     });
-    
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch blogs" });
   }
@@ -68,11 +77,13 @@ router.post("/", firebaseAuth, upload.single("image"), async (req, res) => {
   try {
     // optional image upload
     let imageUrl = req.body.imageUrl;
+    let imagePublicId = req.body.imagePublicId; // Allow passing existing public_id
     if (req.file) {
       const uploadResult = await uploadImage(req.file.path, {
         folder: "blogs",
       });
       imageUrl = uploadResult.secure_url;
+      imagePublicId = uploadResult.public_id; // Store Cloudinary's public_id
     }
 
     // normalize tags: accept array or comma-separated string
@@ -98,6 +109,7 @@ router.post("/", firebaseAuth, upload.single("image"), async (req, res) => {
       content: req.body.content,
       author: req.user ? req.user.name || req.user.email : req.body.author,
       imageUrl,
+      imagePublicId, // Store the Cloudinary public_id
       tag: tags,
       status: req.body.status || "published",
       ...(createdAt ? { createdAt } : {}),
@@ -106,7 +118,11 @@ router.post("/", firebaseAuth, upload.single("image"), async (req, res) => {
     res.status(201).json(blog);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to create blog" });
+    const message =
+      process.env.NODE_ENV === "production"
+        ? "Failed to create blog"
+        : err.message || String(err);
+    res.status(500).json({ error: message });
   }
 });
 
@@ -124,11 +140,22 @@ router.put("/:id", firebaseAuth, upload.single("image"), async (req, res) => {
     }
 
     let imageUrl = req.body.imageUrl;
+    let imagePublicId = req.body.imagePublicId;
     if (req.file) {
+      // If replacing an existing image, try to delete the old one first
+      if (blog.imagePublicId) {
+        try {
+          await cloudinary.uploader.destroy(blog.imagePublicId);
+        } catch (err) {
+          console.error("Failed to delete old image:", err);
+          // Continue with upload even if deletion fails
+        }
+      }
       const uploadResult = await uploadImage(req.file.path, {
         folder: "blogs",
       });
       imageUrl = uploadResult.secure_url;
+      imagePublicId = uploadResult.public_id;
     }
 
     // normalize tags for update
@@ -156,6 +183,7 @@ router.put("/:id", firebaseAuth, upload.single("image"), async (req, res) => {
         description: req.body.description,
         content: req.body.content,
         imageUrl: imageUrl || blog.imageUrl,
+        imagePublicId: imagePublicId || blog.imagePublicId,
         tag: tagsUpdate || blog.tag,
         status: req.body.status || blog.status,
         ...(createdAtUpdate ? { createdAt: createdAtUpdate } : {}),
@@ -181,6 +209,31 @@ router.delete("/:id", firebaseAuth, async (req, res) => {
       return res
         .status(403)
         .json({ error: "Not authorized to delete this blog" });
+    }
+
+    // Delete the blog's image from Cloudinary if it exists
+    if (blog.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(blog.imagePublicId).catch((err) => {
+          // Log but continue with blog deletion even if image deletion fails
+          console.error(
+            "Failed to delete image from Cloudinary:",
+            blog.imagePublicId,
+            err
+          );
+        });
+      } catch (err) {
+        console.error("Error during image deletion:", err);
+        // Continue with blog deletion even if image deletion fails
+      }
+    }
+
+    // Delete associated comments for this blog (non-blocking for image deletion)
+    try {
+      await Comment.deleteMany({ blogId: blog._id });
+    } catch (err) {
+      console.error("Failed to delete associated comments:", err);
+      // continue even if comment deletion fails
     }
 
     await Blog.findByIdAndDelete(req.params.id);

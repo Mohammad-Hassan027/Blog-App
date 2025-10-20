@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
 import useBlogStore from "../../store/useBlogStore";
-import { uploadToCloudinary } from "../../utils/cloudinary";
+import { getImageDataUrl } from "../../utils/image";
 import MarkdownRules from "../../components/MarkdownRules";
 import MarkdownEditor from "../../components/MarkdownEditor";
 
@@ -54,28 +54,44 @@ function CreatePost() {
         return;
       }
 
+      // Create description from content
+      const description =
+        content
+          .trim()
+          .replace(/#+\s/g, "") // Remove headers (#, ##, etc)
+          .replace(/\*\*/g, "") // Remove bold markers
+          .replace(/\*/g, "") // Remove italic markers
+          .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Replace [text](url) with just text
+          .replace(/`/g, "") // Remove code markers
+          .replace(/\n/g, " ") // Replace newlines with spaces
+          .replace(/\s+/g, " ") // Replace multiple spaces with single space
+          .substring(0, 200) + "...";
+
       const postData = {
         title: title.trim(),
         content: content,
-        imageUrl,
-        description:
-          content
-            .trim()
-            .replace(/#+\s/g, "") // Remove headers (#, ##, etc)
-            .replace(/\*\*/g, "") // Remove bold markers
-            .replace(/\*/g, "") // Remove italic markers
-            .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Replace [text](url) with just text
-            .replace(/`/g, "") // Remove code markers
-            .replace(/\n/g, " ") // Replace newlines with spaces
-            .replace(/\s+/g, " ") // Replace multiple spaces with single space
-            .substring(0, 200) + "...",
+        description,
         author: user.displayName || user.email,
         createdAt: new Date().toISOString(),
         tag: tags,
         status: status,
       };
 
-      await createPost(postData);
+      let formData = null;
+
+      // If there's an uploaded file, create FormData
+      if (uploadedFile) {
+        formData = new FormData();
+        formData.append("image", uploadedFile);
+        // Append other data
+        Object.entries(postData).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+      } else if (imageUrl) {
+        postData.imageUrl = imageUrl;
+      }
+
+      await createPost(formData || postData);
       navigate("/");
     } catch (err) {
       setFormError(err.message || "Failed to create post");
@@ -175,7 +191,8 @@ function CreatePost() {
                     <div className="flex-1">
                       <input
                         className="form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500"
-                        type="url"  A 
+                        type="url"
+                        A
                         placeholder="Enter image URL or upload a file"
                         value={imageUrl}
                         onChange={(e) => {
@@ -193,16 +210,23 @@ function CreatePost() {
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (file) {
+                            if (file.size > 5 * 1024 * 1024) {
+                              // 5MB limit
+                              setFormError("Image must be less than 5MB");
+                              return;
+                            }
                             setIsUploading(true);
                             setFormError("");
                             try {
-                              const url = await uploadToCloudinary(file);
-                              setImageUrl(url);
-                              setImagePreview(url);
+                              // Create a preview
+                              const preview = await getImageDataUrl(file);
+                              setImagePreview(preview);
                               setUploadedFile(file);
-                            } catch (error) {
+                              setImageUrl(""); // Clear URL input when file is selected
+                            } catch (err) {
+                              console.error(err);
                               setFormError(
-                                "Failed to upload image. Please try again."
+                                "Failed to preview image. Please try again."
                               );
                             } finally {
                               setIsUploading(false);
