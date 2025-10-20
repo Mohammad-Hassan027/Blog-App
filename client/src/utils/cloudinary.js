@@ -1,5 +1,5 @@
 const CLOUDINARY_CLOUD_NAME = "dopnsnxot";
-const CLOUDINARY_UPLOAD_PRESET = "ml_default";
+const CLOUDINARY_UPLOAD_PRESET = "blog_unsigned";
 
 export async function uploadToCloudinary(file) {
   try {
