@@ -166,18 +166,24 @@ function Header() {
       {mobileOpen && (
         <div className="px-4 pt-2 pb-4 border-t md:hidden">
           <nav className="flex flex-col gap-2">
-            <Link to="/" className="text-sm font-medium hover:text-blue-500">
+            <Link
+              to="/"
+              className="text-sm font-medium hover:text-blue-500"
+              onClick={() => setMobileOpen(false)}
+            >
               Home
             </Link>
             <Link
               to="/about"
               className="text-sm font-medium hover:text-blue-500"
+              onClick={() => setMobileOpen(false)}
             >
               About
             </Link>
             <Link
               to="/contact"
               className="text-sm font-medium hover:text-blue-500"
+              onClick={() => setMobileOpen(false)}
             >
               Contact
             </Link>

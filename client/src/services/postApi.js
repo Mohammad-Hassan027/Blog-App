@@ -116,7 +116,7 @@ export async function getComments(postId) {
   return fetchWithAuth(`/api/comments?blogId=${postId}`);
 }
 
-export async function deleteComment(postId, commentId) {
+export async function deleteComment(commentId) {
   return fetchWithAuth(`/api/comments/${commentId}`, {
     method: "DELETE",
   });

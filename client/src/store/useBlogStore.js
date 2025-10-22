@@ -4,7 +4,7 @@ import useAuthStore from "./useAuthStore";
 import avater from "../assets/avatar.png";
 // import { avater } from "..";
 
-const useBlogStore = create((set, get) => ({
+const useBlogStore = create((set) => ({
   blogs: [],
   currentBlog: null,
   loading: false,
@@ -12,6 +12,7 @@ const useBlogStore = create((set, get) => ({
   currentPage: 1,
   totalPages: 1,
   error: null,
+  currentBlogComments: [],
 
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
@@ -97,13 +98,10 @@ const useBlogStore = create((set, get) => ({
       await postApi.deletePost(id);
       set((state) => ({
         blogs: state.blogs.filter((blog) => {
-          const bid = blog._id || blog.id;
+          const bid = blog._id;
           return bid !== id;
         }),
-        currentBlog:
-          (state.currentBlog?._id || state.currentBlog?.id) === id
-            ? null
-            : state.currentBlog,
+        currentBlog: state.currentBlog?._id === id ? null : state.currentBlog,
         loading: false,
       }));
     } catch (error) {
@@ -128,10 +126,10 @@ const useBlogStore = create((set, get) => ({
         const cbid = blog ? blog._id || blog.id : null;
         if (blog && String(cbid) === String(blogId)) {
           return {
-            currentBlog: {
-              ...blog,
-              comments: [newComment, ...(blog.comments || [])],
-            },
+            currentBlogComments: [
+              newComment,
+              ...(state.currentBlogComments || []),
+            ],
             loading: false,
           };
         }
@@ -148,6 +146,9 @@ const useBlogStore = create((set, get) => ({
   getCommentsFor: async (blogId) => {
     try {
       const comments = await postApi.getComments(blogId);
+      set(() => ({
+        currentBlogComments: comments,
+      }));
       return comments;
     } catch (error) {
       console.error("Failed to fetch comments:", error);
@@ -158,16 +159,15 @@ const useBlogStore = create((set, get) => ({
   deleteComment: async (blogId, commentId) => {
     try {
       set({ loading: true, error: null });
-      await postApi.deleteComment(blogId, commentId);
+      await postApi.deleteComment(commentId);
       set((state) => {
         const blog = state.currentBlog;
-        const cbid = blog ? blog._id || blog.id : null;
+        const cbid = blog ? blog._id : null;
         if (blog && String(cbid) === String(blogId)) {
           return {
-            currentBlog: {
-              ...blog,
-              comments: blog.comments.filter((c) => c.id !== commentId),
-            },
+            currentBlogComments: state.currentBlogComments.filter((comment) => {
+              return commentId !== comment._id;
+            }),
             loading: false,
           };
         }
