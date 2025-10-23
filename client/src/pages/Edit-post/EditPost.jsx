@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
 import useBlogStore from "../../store/useBlogStore";
-// Assuming getImageDataUrl is available or you use a direct Cloudinary hook
 import { uploadToCloudinary } from "../../utils/cloudinary";
 import MarkdownRules from "../../components/MarkdownRules";
 import MarkdownEditor from "../../components/MarkdownEditor";
@@ -19,13 +18,15 @@ function EditPost() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState(""); // Final image URL (could be uploaded or external)
+  const [imageUrl, setImageUrl] = useState("");
   const [initialImageUrl, setInitialImageUrl] = useState(""); // To track if the image has changed
   const [isUploading, setIsUploading] = useState(false);
   const [formError, setFormError] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [tags, setTags] = useState([]);
   const [status, setStatus] = useState("published");
+
+  const isActionActive = loading || isUploading;
 
   const tagOptions = [
     "Technology",
@@ -99,6 +100,7 @@ function EditPost() {
     } catch (err) {
       console.error(err);
       setFormError("Failed to upload image. Please try again.");
+      // Revert to initial URL on failed upload
       setImageUrl(initialImageUrl);
       setImagePreview(initialImageUrl);
     } finally {
@@ -199,10 +201,12 @@ function EditPost() {
                 <div className="flex flex-wrap items-center gap-2">
                   <select
                     id="tags"
-                    className="form-select rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500"
+                    className={`form-select rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500 ${
+                      isActionActive ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                     value=""
                     onChange={handleTagChange}
-                    disabled={tags.length >= MAX_TAGS}
+                    disabled={tags.length >= MAX_TAGS || isActionActive}
                   >
                     <option value="" disabled>
                       {tags.length === MAX_TAGS
@@ -228,9 +232,14 @@ function EditPost() {
                         {tag}
                         <button
                           type="button"
-                          className="ml-1 text-blue-500 hover:text-blue-700 focus:outline-none"
+                          className={`ml-1 text-blue-500 hover:text-blue-700 focus:outline-none ${
+                            isActionActive
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }`}
                           aria-label={`Remove ${tag}`}
                           onClick={() => handleTagRemove(tag)}
+                          disabled={isActionActive}
                         >
                           &times;
                         </button>
@@ -247,12 +256,15 @@ function EditPost() {
                     Title
                   </label>
                   <input
-                    className="form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500"
+                    className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500 ${
+                      isActionActive ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                     id="title"
                     placeholder="Enter post title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     required
+                    disabled={isActionActive}
                   />
                 </div>
               </div>
@@ -264,12 +276,14 @@ function EditPost() {
                   <div className="flex items-start gap-2">
                     <div className="flex-1">
                       <input
-                        className="form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500"
+                        className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500 ${
+                          isActionActive ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                         type="url"
                         placeholder="Enter image URL or upload a file"
                         value={imageUrl}
                         onChange={handleImageUrlChange}
-                        disabled={isUploading}
+                        disabled={isActionActive}
                       />
                     </div>
                     <div className="relative">
@@ -279,12 +293,14 @@ function EditPost() {
                         className="hidden"
                         accept="image/*"
                         onChange={handleFileUpload}
-                        disabled={isUploading}
+                        disabled={isActionActive}
                       />
                       <label
                         htmlFor="image-upload"
-                        className={`inline-flex items-center px-4 py-3 rounded bg-gray-100 hover:bg-gray-200 cursor-pointer text-sm font-medium ${
-                          isUploading ? "opacity-50 cursor-not-allowed" : ""
+                        className={`inline-flex items-center px-4 py-3 rounded bg-gray-100 text-sm font-medium ${
+                          isActionActive
+                            ? "opacity-50 cursor-not-allowed"
+                            : "cursor-pointer hover:bg-gray-200"
                         }`}
                       >
                         {isUploading ? "Uploading..." : "Upload"}
@@ -314,9 +330,12 @@ function EditPost() {
                     />
                     <button
                       type="button"
-                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full text-xs w-6 h-6 flex items-center justify-center hover:bg-red-600 transition"
+                      className={`absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full text-xs w-6 h-6 flex items-center justify-center hover:bg-red-600 transition ${
+                        isActionActive ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                       aria-label="Remove image"
                       onClick={clearImageStates}
+                      disabled={isActionActive}
                     >
                       &times;
                     </button>
@@ -327,17 +346,17 @@ function EditPost() {
               <MarkdownEditor
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+                loading={loading}
+                isUploading={isUploading}
               />
 
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={(e) => handleSubmit(e, "draft")}
-                  disabled={loading || isUploading}
+                  disabled={isActionActive}
                   className={`w-full sm:w-auto rounded bg-gray-200 px-6 py-2.5 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-300 ${
-                    loading || isUploading
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
+                    isActionActive ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
                   {loading ? "Saving..." : "Save Draft"}
@@ -345,11 +364,9 @@ function EditPost() {
                 <button
                   type="button"
                   onClick={(e) => handleSubmit(e, "published")}
-                  disabled={loading || isUploading}
+                  disabled={isActionActive}
                   className={`w-full sm:w-auto rounded bg-blue-500 px-6 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-blue-500/90 ${
-                    loading || isUploading
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
+                    isActionActive ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
                   {loading ? "Updating..." : "Update Post"}
