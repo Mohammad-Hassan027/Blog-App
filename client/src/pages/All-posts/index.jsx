@@ -3,7 +3,6 @@ import { MdExpandMore } from "react-icons/md";
 import { HiChevronRight } from "react-icons/hi2";
 import { HiChevronLeft } from "react-icons/hi2";
 import BlogPostCard from "./BlogPostCard";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useBlogStore from "../../store/useBlogStore";
 
@@ -25,10 +24,8 @@ function AllPostsPage() {
   );
 
   useEffect(() => {
-    if (currentPage === 0) {
-      fetchBlogs();
-    }
-  }, [fetchBlogs, currentPage]);
+    fetchBlogs();
+  }, [fetchBlogs]);
 
   return (
     <main className="container px-4 py-2 sm:py-8 mx-auto grow sm:px-6 lg:px-8 md:py-12">
@@ -105,7 +102,6 @@ function AllPostsPage() {
                   aria-label="Pagination"
                   className="flex items-center space-x-2"
                 >
-                  {/* Previous Button */}
                   <button
                     className={`inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full ${
                       currentPage > 1
@@ -121,7 +117,6 @@ function AllPostsPage() {
                     </span>
                   </button>
 
-                  {/* Page Numbers */}
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (pageNumber) => (
                       <button
@@ -137,7 +132,6 @@ function AllPostsPage() {
                       </button>
                     )
                   )}
-                  {/* Next Button */}
                   <button
                     className={`inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full ${
                       currentPage < totalPages

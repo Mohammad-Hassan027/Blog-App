@@ -5,12 +5,9 @@ const path = require("path");
 let serviceAccount;
 
 try {
-  // Check if the environment variable is set
   if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-    // Parse the JSON string from the environment variable
     serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
   } else {
-    // Fallback for local development (if you still want to use the file locally)
     const serviceAccountPath = path.resolve(
       process.env.FIREBASE_SERVICE_ACCOUNT_PATH
     );

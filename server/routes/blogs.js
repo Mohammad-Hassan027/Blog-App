@@ -15,16 +15,12 @@ if (!fs.existsSync(tmpDir)) {
 
 const upload = multer({ dest: tmpDir });
 
-// GET /api/blogs - list all PUBLISHED blogs for public view
 router.get("/", blogsController.getBlogs);
 
-// GET /api/blogs/my-posts - list all posts for the logged in user
 router.get("/my-posts", firebaseAuth, blogsController.getMyPosts);
 
-// GET /api/blogs/:id - get a single blog
 router.get("/:id", blogsController.getBlogById);
 
-// POST /api/blogs - create a new blog (requires auth)
 router.post(
   "/",
   firebaseAuth,
@@ -32,7 +28,6 @@ router.post(
   blogsController.createBlog
 );
 
-// PUT /api/blogs/:id - update blog (requires auth)
 router.put(
   "/:id",
   firebaseAuth,
@@ -40,7 +35,6 @@ router.put(
   blogsController.updateBlog
 );
 
-// DELETE /api/blogs/:id - delete blog (requires auth)
 router.delete("/:id", firebaseAuth, blogsController.deleteBlog);
 
 module.exports = router;

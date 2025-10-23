@@ -1,7 +1,6 @@
 const Comment = require("../models/Comment");
 const Blog = require("../models/Blog");
 
-// GET /api/comments?blogId=... - list comments for a blog
 async function getComments(req, res) {
   try {
     const { blogId } = req.query;
@@ -14,7 +13,6 @@ async function getComments(req, res) {
   }
 }
 
-// POST /api/comments - create comment (optional auth)
 async function createComment(req, res) {
   try {
     const { blogId, author, text, avatar } = req.body;
@@ -30,7 +28,6 @@ async function createComment(req, res) {
         ? req.user.name || req.user.email
         : author || "Anonymous",
       text,
-      // prefer provided avatar, then Firebase token picture, otherwise null
       avatar: avatar || (req.user && req.user.picture) || null,
     });
     await comment.save();
@@ -41,13 +38,11 @@ async function createComment(req, res) {
   }
 }
 
-// DELETE /api/comments/:id - delete comment (requires auth)
 async function deleteComment(req, res) {
   try {
     const comment = await Comment.findById(req.params.id);
     if (!comment) return res.status(404).json({ error: "Comment not found" });
 
-    // Check if user is the comment author or the blog author
     if (req.user.email !== comment.author && req.user.name !== comment.author) {
       const blog = await Blog.findById(comment.blogId);
       if (
