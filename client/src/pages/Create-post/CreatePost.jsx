@@ -5,6 +5,10 @@ import useBlogStore from "../../store/useBlogStore";
 import { getImageDataUrl } from "../../utils/image";
 import MarkdownRules from "../../components/MarkdownRules";
 import MarkdownEditor from "../../components/MarkdownEditor";
+import generateDescription from "../../utils/genDesc";
+
+const MAX_TAGS = 5;
+const MAX_IMAGE_SIZE_MB = 5;
 
 function CreatePost() {
   const navigate = useNavigate();
@@ -13,14 +17,13 @@ function CreatePost() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(""); // URL input
+  const [uploadedFile, setUploadedFile] = useState(null); // File object
+  const [isUploading, setIsUploading] = useState(false); // Only tracks local file processing
   const [formError, setFormError] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState(""); // URL or Data URL
   const [tags, setTags] = useState([]);
 
-  // Example tag options (customize as needed)
   const tagOptions = [
     "Technology",
     "AI",
@@ -33,39 +36,93 @@ function CreatePost() {
     "Education",
     "Other",
   ];
-  // Only show options not already selected
+
   const availableTagOptions = tagOptions.filter((tag) => !tags.includes(tag));
 
-  //  status = "published";
+  const clearImageStates = () => {
+    setImageUrl("");
+    setUploadedFile(null);
+    setImagePreview("");
+  };
+
+  const handleImageUrlChange = (e) => {
+    const url = e.target.value;
+    setImageUrl(url);
+    setImagePreview(url);
+    if (url) {
+      setUploadedFile(null); // Clear file when URL is entered
+    }
+    setFormError("");
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
+      setFormError(`Image must be less than ${MAX_IMAGE_SIZE_MB}MB`);
+      e.target.value = null;
+      clearImageStates();
+      return;
+    }
+
+    setIsUploading(true);
+    setFormError("");
+    setImageUrl("");
+
+    try {
+      const preview = await getImageDataUrl(file);
+      setImagePreview(preview);
+      setUploadedFile(file);
+    } catch (err) {
+      console.error(err);
+      setFormError("Failed to preview image. Please try again.");
+      setUploadedFile(null);
+      setImagePreview("");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleTagChange = (e) => {
+    const val = e.target.value;
+    if (val && !tags.includes(val)) {
+      if (tags.length < MAX_TAGS) {
+        setTags([...tags, val]);
+        setFormError("");
+      } else {
+        setFormError(`Maximum of ${MAX_TAGS} tags reached.`);
+      }
+    }
+    e.target.value = "";
+  };
+
+  const handleTagRemove = (tagToRemove) => {
+    setTags(tags.filter((t) => t !== tagToRemove));
+    setFormError("");
+  };
+
   const handleSubmit = async (e, status = "published") => {
     e.preventDefault();
     setFormError("");
 
     if (!title.trim() || !content.trim()) {
-      setFormError("Title and content are required");
+      setFormError("Title and content are required.");
+      return;
+    }
+
+    if (isUploading) {
+      setFormError("Please wait for the image processing to complete.");
+      return;
+    }
+
+    if (imageUrl && !imageUrl.match(/^https?:\/\/.+/)) {
+      setFormError("The image URL must start with http:// or https://");
       return;
     }
 
     try {
-      if (imageUrl && !imageUrl.match(/^https?:\/\/.+/)) {
-        setFormError(
-          "Please enter a valid image URL starting with http:// or https://"
-        );
-        return;
-      }
-
-      // Create description from content
-      const description =
-        content
-          .trim()
-          .replace(/#+\s/g, "") // Remove headers (#, ##, etc)
-          .replace(/\*\*/g, "") // Remove bold markers
-          .replace(/\*/g, "") // Remove italic markers
-          .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Replace [text](url) with just text
-          .replace(/`/g, "") // Remove code markers
-          .replace(/\n/g, " ") // Replace newlines with spaces
-          .replace(/\s+/g, " ") // Replace multiple spaces with single space
-          .substring(0, 200) + "...";
+      const description = generateDescription(content);
 
       const postData = {
         title: title.trim(),
@@ -79,13 +136,15 @@ function CreatePost() {
 
       let formData = null;
 
-      // If there's an uploaded file, create FormData
       if (uploadedFile) {
         formData = new FormData();
         formData.append("image", uploadedFile);
-        // Append other data
         Object.entries(postData).forEach(([key, value]) => {
-          formData.append(key, value);
+          if (Array.isArray(value)) {
+            value.forEach((item) => formData.append(key, item));
+          } else {
+            formData.append(key, value);
+          }
         });
       } else if (imageUrl) {
         postData.imageUrl = imageUrl;
@@ -116,9 +175,12 @@ function CreatePost() {
                 {error || formError}
               </div>
             )}
-            <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+            <form
+              className="space-y-4 sm:space-y-6"
+              onSubmit={(e) => handleSubmit(e, "published")}
+            >
+              {" "}
               <div className="space-y-2">
-                {/* Tag selection refined UI */}
                 <label className="text-sm font-medium" htmlFor="tags">
                   Tags
                 </label>
@@ -127,15 +189,15 @@ function CreatePost() {
                     id="tags"
                     className="form-select rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500"
                     value=""
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (val && !tags.includes(val)) {
-                        setTags([...tags, val]);
-                      }
-                    }}
+                    onChange={handleTagChange}
+                    disabled={tags.length >= MAX_TAGS}
                   >
                     <option value="" disabled>
-                      {tags.length === 0 ? "Select tag" : "Add another tag"}
+                      {tags.length === MAX_TAGS
+                        ? `Maximum of ${MAX_TAGS} tags reached`
+                        : tags.length === 0
+                        ? "Select tag"
+                        : "Add another tag"}
                     </option>
                     {availableTagOptions.map((tag) => (
                       <option key={tag} value={tag}>
@@ -156,7 +218,7 @@ function CreatePost() {
                           type="button"
                           className="ml-1 text-blue-500 hover:text-blue-700 focus:outline-none"
                           aria-label={`Remove ${tag}`}
-                          onClick={() => setTags(tags.filter((t) => t !== tag))}
+                          onClick={() => handleTagRemove(tag)}
                         >
                           &times;
                         </button>
@@ -165,9 +227,8 @@ function CreatePost() {
                   </div>
                 )}
                 <p className="mt-1 text-xs text-gray-500">
-                  Add up to {tagOptions.length} tags.
+                  Add up to {MAX_TAGS} tags. Currently selected: {tags.length}.
                 </p>
-                {/* End of form fields */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" htmlFor="title">
                     Title
@@ -192,13 +253,10 @@ function CreatePost() {
                       <input
                         className="form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500"
                         type="url"
-                        A
                         placeholder="Enter image URL or upload a file"
                         value={imageUrl}
-                        onChange={(e) => {
-                          setImageUrl(e.target.value);
-                          setImagePreview(e.target.value);
-                        }}
+                        onChange={handleImageUrlChange} // New handler
+                        disabled={!!uploadedFile || isUploading} // Disable URL input if file is selected or uploading
                       />
                     </div>
                     <div className="relative">
@@ -207,55 +265,50 @@ function CreatePost() {
                         id="image-upload"
                         className="hidden"
                         accept="image/*"
-                        onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            if (file.size > 5 * 1024 * 1024) {
-                              // 5MB limit
-                              setFormError("Image must be less than 5MB");
-                              return;
-                            }
-                            setIsUploading(true);
-                            setFormError("");
-                            try {
-                              // Create a preview
-                              const preview = await getImageDataUrl(file);
-                              setImagePreview(preview);
-                              setUploadedFile(file);
-                              setImageUrl(""); // Clear URL input when file is selected
-                            } catch (err) {
-                              console.error(err);
-                              setFormError(
-                                "Failed to preview image. Please try again."
-                              );
-                            } finally {
-                              setIsUploading(false);
-                            }
-                          }
-                        }}
+                        onChange={handleFileUpload} // New handler
+                        disabled={!!imageUrl || isUploading} // Disable file input if URL is entered or uploading
                       />
                       <label
                         htmlFor="image-upload"
                         className={`inline-flex items-center px-4 py-3 rounded bg-gray-100 hover:bg-gray-200 cursor-pointer text-sm font-medium ${
-                          isUploading ? "opacity-50 cursor-not-allowed" : ""
+                          isUploading || !!imageUrl
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
                         }`}
                       >
-                        {isUploading ? "Uploading..." : "Upload"}
+                        {isUploading ? "Processing..." : "Upload"}
                       </label>
                     </div>
                   </div>
                   <p className="mt-1 text-xs text-gray-500">
-                    Supported formats: JPG, PNG, GIF. Max size: 5MB
+                    Supported formats: JPG, PNG, GIF. Max size:{" "}
+                    {MAX_IMAGE_SIZE_MB}MB
                   </p>
                 </div>
                 {imagePreview && (
-                  <div className="mt-2">
+                  <div className="relative mt-2">
                     <img
                       src={imagePreview}
                       alt="Preview"
                       className="object-cover w-full rounded max-h-48"
-                      onError={() => setImagePreview("")}
+                      onError={() => {
+                        console.error(
+                          "Image failed to load. Clearing preview."
+                        );
+                        clearImageStates();
+                        setFormError(
+                          "The image could not be loaded. Please use a different image or URL."
+                        );
+                      }}
                     />
+                    <button
+                      type="button"
+                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition"
+                      aria-label="Remove image"
+                      onClick={clearImageStates}
+                    >
+                      &times;
+                    </button>
                   </div>
                 )}
               </div>
@@ -267,19 +320,22 @@ function CreatePost() {
                 <button
                   type="button"
                   onClick={(e) => handleSubmit(e, "draft")}
-                  disabled={loading}
+                  disabled={loading || isUploading}
                   className={`w-full sm:w-auto rounded bg-gray-200 px-6 py-2.5 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-300 ${
-                    loading ? "opacity-50 cursor-not-allowed" : ""
+                    loading || isUploading
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
                   }`}
                 >
                   {loading ? "Saving..." : "Save Draft"}
                 </button>
                 <button
                   type="submit"
-                  onClick={(e) => handleSubmit(e, "published")}
-                  disabled={loading}
+                  disabled={loading || isUploading}
                   className={`w-full sm:w-auto rounded bg-blue-500 px-6 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-blue-500/90 ${
-                    loading ? "opacity-50 cursor-not-allowed" : ""
+                    loading || isUploading
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
                   }`}
                 >
                   {loading ? "Publishing..." : "Publish"}

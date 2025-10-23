@@ -84,10 +84,15 @@ function CommentSection({ id, author }) {
                         .then((result) => {
                           if (result.isConfirmed) {
                             deleteComment(id, c._id);
-                            swalWithBootstrapButtons.fire({
-                              title: "Deleted!",
-                              text: "Your file has been deleted.",
+                            Swal.fire({
+                              width: 370,
+                              toast: true,
+                              position: "bottom-end",
                               icon: "success",
+                              title: "Your comment has been deleted.",
+                              showConfirmButton: false,
+                              timer: 1600,
+                              timerProgressBar: true,
                             });
                           } else if (
                             /* Read more about handling dismissals below */
@@ -95,7 +100,7 @@ function CommentSection({ id, author }) {
                           ) {
                             swalWithBootstrapButtons.fire({
                               title: "Cancelled",
-                              text: "Your imaginary file is safe :)",
+                              text: "Your comment is safe :)",
                               icon: "error",
                             });
                           }
@@ -146,6 +151,16 @@ function CommentSection({ id, author }) {
                 addComment(id, { text });
                 setCommentText("");
                 if (!user) setCommentAuthor("");
+                Swal.fire({
+                  width: 370,
+                  toast: true,
+                  position: "bottom-end",
+                  icon: "success",
+                  title: "Your comment has been saved.",
+                  showConfirmButton: false,
+                  timer: 1600,
+                  timerProgressBar: true,
+                });
               }}
               className="items-center justify-center px-4 overflow-hidden text-sm font-semibold text-white transition-transform bg-blue-500 rounded-lg shadow-sm cursor-pointer h-9 hover:scale-105 active:scale-95"
             >
