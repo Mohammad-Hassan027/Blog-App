@@ -38,7 +38,7 @@ function Header() {
     )}&background=random`;
 
   return (
-    <header className="border-b border-[#e3e8ed]/20 dark:border-[#e3e8ed]/10 px-4 sm:px-6 lg:px-8 py-4">
+    <header className="border-b border-[#e3e8ed]/20 dark:border-[#e3e8ed]/10 px-4 sm:px-6 lg:px-8 py-4 sticky top-0 bg-white/90 backdrop-blur z-30">
       <div className="flex items-center justify-between mx-auto max-w-8xl">
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-3">
@@ -107,7 +107,7 @@ function Header() {
             <>
               <Link
                 to="/create"
-                className="hidden px-3 py-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm sm:inline-block sm:px-4 hover:bg-blue-500/90"
+                className="hidden px-3 py-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm sm:inline-block sm:px-4 hover:bg-blue-500/90 hover:scale-105 active:scale-95"
               >
                 New Post
               </Link>
@@ -154,7 +154,7 @@ function Header() {
           ) : (
             <Link
               to="/login"
-              className="px-3 py-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm sm:px-4 hover:bg-blue-500/90"
+              className="px-3 py-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm sm:px-4 hover:bg-blue-500/90 hover:scale-105 active:scale-95"
             >
               Sign In
             </Link>
@@ -199,7 +199,7 @@ function Header() {
             {user ? (
               <Link
                 to="/create"
-                className="inline-block px-3 py-2 mt-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm hover:bg-blue-500/90"
+                className="inline-block px-3 py-2 mt-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm hover:bg-blue-500/90 hover:scale-105 active:scale-95"
                 onClick={() => setMobileOpen(false)}
               >
                 New Post

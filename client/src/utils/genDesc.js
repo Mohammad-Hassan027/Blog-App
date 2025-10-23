@@ -2,10 +2,10 @@ const generateDescription = (markdownContent) => {
   return (
     markdownContent
       .trim()
-      .replace(/(\*|_|`|#)+/g, "") // Remove *, _, #, `
-      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Replace [text](url) with just text
-      .replace(/\n/g, " ") // Replace newlines with spaces
-      .replace(/\s+/g, " ", "g") // Replace multiple spaces with single space
+      .replace(/(\*|_|`|#)+/g, "")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/\n/g, " ")
+      .replace(/\s+/g, " ", "g")
       .substring(0, 200) + "..."
   );
 };

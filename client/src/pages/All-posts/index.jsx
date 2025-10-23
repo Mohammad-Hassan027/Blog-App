@@ -25,10 +25,10 @@ function AllPostsPage() {
   );
 
   useEffect(() => {
-    if (filteredBlogs.length === 0 || currentPage === 0) {
+    if (currentPage === 0) {
       fetchBlogs();
     }
-  }, [filteredBlogs.length, fetchBlogs, currentPage]);
+  }, [fetchBlogs, currentPage]);
 
   return (
     <main className="container px-4 py-2 sm:py-8 mx-auto grow sm:px-6 lg:px-8 md:py-12">

@@ -15,7 +15,6 @@ const useAuthStore = create((set) => ({
   loading: true,
   error: null,
 
-  // Initialize auth state listener
   init: () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -38,11 +37,9 @@ const useAuthStore = create((set) => ({
       }
     });
 
-    // Cleanup subscription
     return () => unsubscribe();
   },
 
-  // Register with email/password
   register: async (email, password) => {
     try {
       set({ loading: true, error: null });
@@ -67,7 +64,6 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // Login with email/password
   login: async (email, password) => {
     try {
       set({ loading: true, error: null });
@@ -92,7 +88,6 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // Google Sign In
   signInWithGoogle: async () => {
     try {
       set({ loading: true, error: null });
@@ -116,7 +111,6 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // Update Profile
   updateProfile: async (profileData) => {
     try {
       set({ loading: true, error: null });
@@ -141,7 +135,6 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // Sign out
   signOut: async () => {
     try {
       await firebaseSignOut(auth);
@@ -152,7 +145,6 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // Clear error
   clearError: () => set({ error: null }),
 }));
 

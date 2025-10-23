@@ -8,7 +8,7 @@ function Home() {
   const fetchBlogs = useBlogStore((s) => s.fetchBlogs);
 
   useEffect(() => {
-    fetchBlogs(); // Fetch blogs when the component mounts
+    fetchBlogs();
   }, [fetchBlogs]);
 
   return (
@@ -32,7 +32,7 @@ function Home() {
           </p>
           <div className="mt-10">
             <Link
-              className="inline-block px-8 py-3 text-base font-medium text-white transition-transform transform bg-blue-500 rounded-lg hover:bg-blue-500/90 hover:scale-105"
+              className="inline-block px-8 py-3 text-base font-medium text-white transition-transform transform bg-blue-500 rounded-lg hover:bg-blue-500/90 hover:scale-105 active:scale-95"
               to={"/all-posts"}
             >
               Browse All Posts

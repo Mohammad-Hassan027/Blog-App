@@ -2,7 +2,6 @@ import { create } from "zustand";
 import * as postApi from "../services/postApi";
 import useAuthStore from "./useAuthStore";
 import avater from "../assets/avatar.png";
-// import { avater } from "..";
 
 const useBlogStore = create((set) => ({
   blogs: [],

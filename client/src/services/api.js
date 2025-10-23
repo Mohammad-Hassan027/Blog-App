@@ -1,6 +1,6 @@
 import { getAuth } from "firebase/auth";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"; // Update this with your backend URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export async function fetchWithAuth(endpoint, options = {}) {
   const auth = getAuth();
@@ -35,6 +35,5 @@ export async function fetchWithAuth(endpoint, options = {}) {
     return null;
   }
 
-  // Otherwise parse JSON response
   return response.json();
 }
