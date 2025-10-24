@@ -3,6 +3,7 @@ const Comment = require("../models/Comment");
 const { cloudinary, uploadImage } = require("../utils/cloudinary");
 const fs = require("fs").promises;
 const os = require("os");
+const path = require("path");
 
 const TEMP_UPLOAD_ROOT = path.join(os.tmpdir(), "blog-app-uploads");
 
