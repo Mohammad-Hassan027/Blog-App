@@ -20,24 +20,24 @@ router.get("/", blogsController.getBlogs);
 
 router.get("/my-posts", Limiter, firebaseAuth, blogsController.getMyPosts);
 
-router.get("/:id", firebaseAuth, Limiter, blogsController.getBlogById);
+router.get("/:id", Limiter, firebaseAuth, blogsController.getBlogById);
 
 router.post(
   "/",
-  firebaseAuth,
   Limiter,
+  firebaseAuth,
   upload.single("image"),
   blogsController.createBlog
 );
 
 router.put(
   "/:id",
-  firebaseAuth,
   Limiter,
+  firebaseAuth,
   upload.single("image"),
   blogsController.updateBlog
 );
 
-router.delete("/:id", firebaseAuth, Limiter, blogsController.deleteBlog);
+router.delete("/:id", Limiter, firebaseAuth, blogsController.deleteBlog);
 
 module.exports = router;
