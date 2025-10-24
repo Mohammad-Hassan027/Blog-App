@@ -3,7 +3,7 @@ const router = express.Router();
 const { firebaseAuth } = require("../middleware/authFirebase");
 const commentsController = require("../controllers/comments-controller");
 
-router.get("/", commentsController.getComments);
+router.get("/", firebaseAuth, commentsController.getComments);
 
 router.post("/", firebaseAuth, commentsController.createComment);
 
