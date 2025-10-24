@@ -2,6 +2,9 @@ const Blog = require("../models/Blog");
 const Comment = require("../models/Comment");
 const { cloudinary, uploadImage } = require("../utils/cloudinary");
 const fs = require("fs").promises;
+const os = require("os");
+
+const TEMP_UPLOAD_ROOT = path.join(os.tmpdir(), "blog-app-uploads");
 
 async function getBlogs(req, res) {
   try {
@@ -114,7 +117,15 @@ async function createBlog(req, res) {
   } finally {
     if (tempFilePath) {
       try {
-        await fs.unlink(tempFilePath);
+        // Validate temp file path before deleting
+        const resolvedTempPath = path.resolve(tempFilePath);
+        if (resolvedTempPath.startsWith(TEMP_UPLOAD_ROOT)) {
+          await fs.unlink(resolvedTempPath);
+        } else {
+          console.warn(
+            `Refusing to delete file outside temp upload dir: ${resolvedTempPath}`
+          );
+        }
       } catch (cleanupErr) {
         console.error("Failed to delete temp file (createBlog):", cleanupErr);
       }
@@ -191,7 +202,14 @@ async function updateBlog(req, res) {
   } finally {
     if (tempFilePath) {
       try {
-        await fs.unlink(tempFilePath);
+        const resolvedTempPath = path.resolve(tempFilePath);
+        if (resolvedTempPath.startsWith(TEMP_UPLOAD_ROOT)) {
+          await fs.unlink(resolvedTempPath);
+        } else {
+          console.warn(
+            `Refusing to delete file outside temp upload dir: ${resolvedTempPath}`
+          );
+        }
       } catch (cleanupErr) {
         console.error("Failed to delete temp file (updateBlog):", cleanupErr);
       }
