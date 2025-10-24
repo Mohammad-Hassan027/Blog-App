@@ -3,7 +3,6 @@ import { MdExpandMore } from "react-icons/md";
 import { HiChevronRight } from "react-icons/hi2";
 import { HiChevronLeft } from "react-icons/hi2";
 import BlogPostCard from "./BlogPostCard";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useBlogStore from "../../store/useBlogStore";
 
@@ -25,18 +24,13 @@ function AllPostsPage() {
   );
 
   useEffect(() => {
-    if (filteredBlogs.length === 0 || currentPage === 0) {
-      fetchBlogs();
-    }
-  }, [filteredBlogs.length, fetchBlogs]);
+    fetchBlogs();
+  }, [fetchBlogs]);
 
   return (
-    <main className="container px-4 py-8 mx-auto grow sm:px-6 lg:px-8 md:py-12">
+    <main className="container px-4 py-2 sm:py-8 mx-auto grow sm:px-6 lg:px-8 md:py-12">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 text-center">
-          <h2 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl text-slate-900 dark:text-white">
-            All Posts
-          </h2>
           <div className="relative max-w-xl mx-auto">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
               <span className="material-symbols-outlined text-slate-400">
@@ -44,7 +38,7 @@ function AllPostsPage() {
               </span>
             </span>
             <input
-              className="w-full py-3 pl-10 pr-4 text-lg transition-colors rounded-full bg-blue-50border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full py-3 pl-10 pr-4 text-lg transition-colors rounded-full bg-blue-50/45 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               placeholder="Search posts..."
               type="search"
               value={searchTerm}
@@ -54,7 +48,7 @@ function AllPostsPage() {
         </div>
         <div className="flex flex-col items-center justify-end mb-8 space-y-4 md:flex-row md:space-y-0 md:space-x-2">
           <div className="relative">
-            <select className="py-2 pl-3 pr-8 text-sm font-medium rounded-md appearance-none text-slate-600 bg-blue-50border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <select className="py-2 pl-3 pr-8 text-sm font-medium rounded-md appearance-none text-slate-600 bg-blue-50/50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
               <option>Category</option>
               <option>Lifestyle</option>
               <option>Technology</option>
@@ -68,7 +62,7 @@ function AllPostsPage() {
             </div>
           </div>
           <div className="relative">
-            <select className="py-2 pl-3 pr-8 text-sm font-medium rounded-md appearance-none text-slate-600 bg-blue-50border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <select className="py-2 pl-3 pr-8 text-sm font-medium rounded-md appearance-none text-slate-600 bg-blue-50/50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
               <option>Tag</option>
               <option>Sustainable</option>
               <option>Photography</option>
@@ -108,7 +102,6 @@ function AllPostsPage() {
                   aria-label="Pagination"
                   className="flex items-center space-x-2"
                 >
-                  {/* Previous Button */}
                   <button
                     className={`inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full ${
                       currentPage > 1
@@ -124,7 +117,6 @@ function AllPostsPage() {
                     </span>
                   </button>
 
-                  {/* Page Numbers */}
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (pageNumber) => (
                       <button
@@ -140,7 +132,6 @@ function AllPostsPage() {
                       </button>
                     )
                   )}
-                  {/* Next Button */}
                   <button
                     className={`inline-flex items-center justify-center w-10 h-10 transition-colors rounded-full ${
                       currentPage < totalPages

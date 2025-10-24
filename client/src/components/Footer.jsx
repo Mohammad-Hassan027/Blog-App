@@ -30,7 +30,7 @@ function Footer() {
             </p>
             <div className="flex gap-4">
               <a
-                href="https://github.com"
+                href="https://github.com/Mohammad-Hassan027"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 transition-colors hover:text-blue-500"
@@ -48,7 +48,7 @@ function Footer() {
                 <FaTwitter size={20} />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/mohammad-hassan-shaikh-750791352?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 transition-colors hover:text-blue-500"

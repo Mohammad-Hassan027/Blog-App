@@ -2,18 +2,11 @@ import { useState } from "react";
 import { handleCopy } from "../utils/copy";
 
 const copyToClipboard = async (text) => {
-  // We use the execCommand fallback for maximum compatibility within the environment
   const textarea = document.createElement("textarea");
   textarea.value = text;
   document.body.appendChild(textarea);
   textarea.select();
   handleCopy(text);
-  // try {
-  //   // document.execCommand("copy");
-  //   await navigator.clipboard.writeText(text);
-  // } catch (err) {
-  //   console.error("Failed to copy text", err);
-  // }
   document.body.removeChild(textarea);
 };
 
@@ -33,15 +26,12 @@ const MarkdownRules = () => {
     { rule: "Horizontal Rule", syntax: "---" },
   ];
 
-  // State to show "Copied!" feedback (by index)
   const [copiedIndex, setCopiedIndex] = useState(null);
-  // State to show the tooltip (by index)
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const handleRuleClick = (syntax, index) => {
     copyToClipboard(syntax);
     setCopiedIndex(index);
-    // Reset the copied status after 2 seconds
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
@@ -65,7 +55,6 @@ const MarkdownRules = () => {
               onClick={() => handleRuleClick(syntax, index)}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              // Title attribute provides a hint for non-hover/touch users
               title={
                 copiedIndex === index ? "Copied!" : `Click to copy: ${rule}`
               }

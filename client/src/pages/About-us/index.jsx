@@ -28,7 +28,7 @@ function AboutPage() {
           </p>
         </section>
         <div className="my-12 border-t border-gray-200"></div>
-        <section>
+        {/* <section>
           <h3 className="mb-12 text-4xl font-bold text-center text-gray-900">
             Meet the Authors
           </h3>
@@ -83,7 +83,7 @@ function AboutPage() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     </main>
   );
