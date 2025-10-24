@@ -33,9 +33,11 @@ async function firebaseAuth(req, res, next) {
 
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({ error: "No token provided or token is malformed" });
+    req.user = null;
+    return next();
+    // return res
+    //   .status(401)
+    //   .json({ error: "No token provided or token is malformed" });
   }
 
   const idToken = authHeader.split("Bearer ")[1];
@@ -51,8 +53,10 @@ async function firebaseAuth(req, res, next) {
     };
     next();
   } catch (err) {
-    console.error("Firebase token verification failed:", err);
-    return res.status(401).json({ error: "Invalid or expired token" });
+    // console.error("Firebase token verification failed:", err);
+    // return res.status(401).json({ error: "Invalid or expired token" });
+    req.user = null;
+    return next();
   }
 }
 

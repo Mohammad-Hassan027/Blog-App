@@ -19,7 +19,7 @@ router.get("/", blogsController.getBlogs);
 
 router.get("/my-posts", firebaseAuth, blogsController.getMyPosts);
 
-router.get("/:id", blogsController.getBlogById);
+router.get("/:id", firebaseAuth, blogsController.getBlogById);
 
 router.post(
   "/",

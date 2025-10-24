@@ -38,8 +38,10 @@ async function getBlogs(req, res) {
 
 async function getMyPosts(req, res) {
   try {
-    if (!req.user) {
-      return res.status(401).json({ error: "Unauthorized: No user logged in" });
+    if (!req.user || !req.user.uid) {
+      return res
+        .status(401)
+        .json({ error: "Authentication required to view your posts." });
     }
 
     const blogs = await Blog.find({
@@ -58,6 +60,16 @@ async function getBlogById(req, res) {
   try {
     const blog = await Blog.findById(req.params.id).lean();
     if (!blog) return res.status(404).json({ error: "Not found" });
+    if (blog.status !== "published") {
+      if (
+        !req.user ||
+        (req.user.name !== blog.author && req.user.email !== blog.author)
+      ) {
+        return res.status(403).json({
+          error: "Not authorized to view this blog post as it is not published",
+        });
+      }
+    }
     res.json(blog);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch blog" });
@@ -65,6 +77,12 @@ async function getBlogById(req, res) {
 }
 
 async function createBlog(req, res) {
+  if (!req.user || !req.user.uid) {
+    return res
+      .status(401)
+      .json({ error: "Authentication required to create a blog." });
+  }
+
   let tempFilePath = req.file ? req.file.path : null;
 
   try {
@@ -135,6 +153,12 @@ async function createBlog(req, res) {
 }
 
 async function updateBlog(req, res) {
+  if (!req.user || !req.user.uid) {
+    return res
+      .status(401)
+      .json({ error: "Authentication required to update a blog." });
+  }
+
   let tempFilePath = req.file ? req.file.path : null;
 
   try {
@@ -219,6 +243,12 @@ async function updateBlog(req, res) {
 }
 
 async function deleteBlog(req, res) {
+  if (!req.user || !req.user.uid) {
+    return res
+      .status(401)
+      .json({ error: "Authentication required to delete a blog." });
+  }
+
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ error: "Blog not found" });
