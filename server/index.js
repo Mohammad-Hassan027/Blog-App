@@ -2,17 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const path = require("path");
 
 const blogsRouter = require("./routes/blogs");
 const commentsRouter = require("./routes/comments");
-// const { firebaseAuth } = require("./middleware/authFirebase");
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-// middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -23,10 +20,8 @@ app.use(
 app.use("/api/blogs", blogsRouter);
 app.use("/api/comments", commentsRouter);
 
-// health
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
-// connect mongo and start
 async function start() {
   try {
     await mongoose.connect(process.env.MONGO_URI);

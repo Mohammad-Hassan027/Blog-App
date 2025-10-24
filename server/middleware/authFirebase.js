@@ -25,7 +25,6 @@ if (serviceAccount && !admin.apps.length) {
 
 async function firebaseAuth(req, res, next) {
   if (!admin.apps.length) {
-    // Firebase Admin was not initialized, return an error
     console.error("Firebase Admin SDK not initialized.");
     return res
       .status(500)
