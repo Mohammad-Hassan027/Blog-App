@@ -1,8 +1,12 @@
 const Blog = require("../models/Blog");
 const Comment = require("../models/Comment");
 const { cloudinary, uploadImage } = require("../utils/cloudinary");
+const fs = require("fs").promises;
+const os = require("os");
+const path = require("path");
 
-// GET /api/blogs - list all PUBLISHED blogs for public view
+const TEMP_UPLOAD_ROOT = path.join(os.tmpdir(), "blog-app-uploads");
+
 async function getBlogs(req, res) {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -32,11 +36,12 @@ async function getBlogs(req, res) {
   }
 }
 
-// GET /api/blogs/my-posts - list all posts for the logged in user (drafts and published)
 async function getMyPosts(req, res) {
   try {
-    if (!req.user) {
-      return res.status(401).json({ error: "Unauthorized: No user logged in" });
+    if (!req.user || !req.user.uid) {
+      return res
+        .status(401)
+        .json({ error: "Authentication required to view your posts." });
     }
 
     const blogs = await Blog.find({
@@ -51,29 +56,44 @@ async function getMyPosts(req, res) {
   }
 }
 
-// GET /api/blogs/:id
 async function getBlogById(req, res) {
   try {
     const blog = await Blog.findById(req.params.id).lean();
     if (!blog) return res.status(404).json({ error: "Not found" });
+    if (blog.status !== "published") {
+      if (
+        !req.user ||
+        (req.user.name !== blog.author && req.user.email !== blog.author)
+      ) {
+        return res.status(403).json({
+          error: "Not authorized to view this blog post as it is not published",
+        });
+      }
+    }
     res.json(blog);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch blog" });
   }
 }
 
-// POST /api/blogs - create (requires auth)
 async function createBlog(req, res) {
+  if (!req.user || !req.user.uid) {
+    return res
+      .status(401)
+      .json({ error: "Authentication required to create a blog." });
+  }
+
+  let tempFilePath = req.file ? req.file.path : null;
+
   try {
-    // optional image upload
     let imageUrl = req.body.imageUrl;
     let imagePublicId = req.body.imagePublicId; // Allow passing existing public_id
     if (req.file) {
-      const uploadResult = await uploadImage(req.file.path, {
+      const uploadResult = await uploadImage(tempFilePath, {
         folder: "blogs",
       });
       imageUrl = uploadResult.secure_url;
-      imagePublicId = uploadResult.public_id; // Store Cloudinary's public_id
+      imagePublicId = uploadResult.public_id;
     }
 
     // normalize tags: accept array or comma-separated string
@@ -99,7 +119,7 @@ async function createBlog(req, res) {
       content: req.body.content,
       author: req.user ? req.user.name || req.user.email : req.body.author,
       imageUrl,
-      imagePublicId, // Store the Cloudinary public_id
+      imagePublicId,
       tag: tags,
       status: req.body.status || "published",
       ...(createdAt ? { createdAt } : {}),
@@ -113,16 +133,38 @@ async function createBlog(req, res) {
         ? "Failed to create blog"
         : err.message || String(err);
     res.status(500).json({ error: message });
+  } finally {
+    if (tempFilePath) {
+      try {
+        // Validate temp file path before deleting
+        const resolvedTempPath = path.resolve(tempFilePath);
+        if (resolvedTempPath.startsWith(TEMP_UPLOAD_ROOT)) {
+          await fs.unlink(resolvedTempPath);
+        } else {
+          console.warn(
+            `Refusing to delete file outside temp upload dir: ${resolvedTempPath}`
+          );
+        }
+      } catch (cleanupErr) {
+        console.error("Failed to delete temp file (createBlog):", cleanupErr);
+      }
+    }
   }
 }
 
-// PUT /api/blogs/:id - update blog (requires auth)
 async function updateBlog(req, res) {
+  if (!req.user || !req.user.uid) {
+    return res
+      .status(401)
+      .json({ error: "Authentication required to update a blog." });
+  }
+
+  let tempFilePath = req.file ? req.file.path : null;
+
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ error: "Blog not found" });
 
-    // Check if user is the author (compare email or display name)
     if (req.user.email !== blog.author && req.user.name !== blog.author) {
       return res
         .status(403)
@@ -138,17 +180,15 @@ async function updateBlog(req, res) {
           await cloudinary.uploader.destroy(blog.imagePublicId);
         } catch (err) {
           console.error("Failed to delete old image:", err);
-          // Continue with upload even if deletion fails
         }
       }
-      const uploadResult = await uploadImage(req.file.path, {
+      const uploadResult = await uploadImage(tempFilePath, {
         folder: "blogs",
       });
       imageUrl = uploadResult.secure_url;
       imagePublicId = uploadResult.public_id;
     }
 
-    // normalize tags for update
     let tagsUpdate = undefined;
     if (req.body.tag) {
       if (Array.isArray(req.body.tag)) tagsUpdate = req.body.tag;
@@ -159,7 +199,6 @@ async function updateBlog(req, res) {
           .filter(Boolean);
     }
 
-    // normalize createdAt for update
     let createdAtUpdate = undefined;
     if (req.body.createdAt) {
       const c = req.body.createdAt;
@@ -185,16 +224,35 @@ async function updateBlog(req, res) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to update blog" });
+  } finally {
+    if (tempFilePath) {
+      try {
+        const resolvedTempPath = path.resolve(tempFilePath);
+        if (resolvedTempPath.startsWith(TEMP_UPLOAD_ROOT)) {
+          await fs.unlink(resolvedTempPath);
+        } else {
+          console.warn(
+            `Refusing to delete file outside temp upload dir: ${resolvedTempPath}`
+          );
+        }
+      } catch (cleanupErr) {
+        console.error("Failed to delete temp file (updateBlog):", cleanupErr);
+      }
+    }
   }
 }
 
-// DELETE /api/blogs/:id - delete blog (requires auth)
 async function deleteBlog(req, res) {
+  if (!req.user || !req.user.uid) {
+    return res
+      .status(401)
+      .json({ error: "Authentication required to delete a blog." });
+  }
+
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ error: "Blog not found" });
 
-    // Check if user is the author
     if (req.user.email !== blog.author && req.user.name !== blog.author) {
       return res
         .status(403)
@@ -205,7 +263,6 @@ async function deleteBlog(req, res) {
     if (blog.imagePublicId) {
       try {
         await cloudinary.uploader.destroy(blog.imagePublicId).catch((err) => {
-          // Log but continue with blog deletion even if image deletion fails
           console.error(
             "Failed to delete image from Cloudinary:",
             blog.imagePublicId,
@@ -214,16 +271,13 @@ async function deleteBlog(req, res) {
         });
       } catch (err) {
         console.error("Error during image deletion:", err);
-        // Continue with blog deletion even if image deletion fails
       }
     }
 
-    // Delete associated comments for this blog (non-blocking for image deletion)
     try {
       await Comment.deleteMany({ blogId: blog._id });
     } catch (err) {
       console.error("Failed to delete associated comments:", err);
-      // continue even if comment deletion fails
     }
 
     await Blog.findByIdAndDelete(req.params.id);

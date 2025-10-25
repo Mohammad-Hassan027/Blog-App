@@ -1,11 +1,10 @@
 import { MdExpandMore } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useBlogStore from "../../store/useBlogStore";
 import Loader from "../../components/Loader";
+import { useMyPosts, useDeletePost } from "../../hooks/blogHooks";
 
-// 1. Import SweetAlert2 and the React wrapper
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -13,16 +12,14 @@ const MySwal = withReactContent(Swal);
 
 function DashBoard() {
   const navigate = useNavigate();
-  const { blogs, loading, error, fetchMyBlogs, deletePost } = useBlogStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("date-desc");
   const [activeTab, setActiveTab] = useState("published");
 
-  useEffect(() => {
-    fetchMyBlogs();
-  }, [fetchMyBlogs]);
+  // Use TanStack Query hooks for data fetching and mutations
+  const { data: blogs = [], isLoading, error: queryError } = useMyPosts();
+  const deletePostMutation = useDeletePost();
 
-  // Use useMemo for filtering by status (Good practice from previous review)
   const publishedBlogs = useMemo(
     () => blogs.filter((blog) => blog.status === "published"),
     [blogs]
@@ -35,7 +32,6 @@ function DashBoard() {
   const blogsToDisplay =
     activeTab === "published" ? publishedBlogs : draftBlogs;
 
-  // Memoize filtering and sorting (Good practice from previous review)
   const filteredAndSortedBlogs = useMemo(() => {
     const lowerSearchTerm = searchTerm.toLowerCase();
 
@@ -74,7 +70,6 @@ function DashBoard() {
     navigate(`/edit-post/${blogId}`);
   };
 
-  // 2. Updated handleDelete to use Swal alert
   const handleDelete = async (blogId, title) => {
     const result = await MySwal.fire({
       title: "Are you sure?",
@@ -88,7 +83,7 @@ function DashBoard() {
 
     if (result.isConfirmed) {
       try {
-        await deletePost(blogId);
+        await deletePostMutation.mutateAsync(blogId);
         MySwal.fire(
           "Deleted!",
           "Your post has been successfully deleted.",
@@ -107,7 +102,6 @@ function DashBoard() {
     }
   };
 
-  // Helper for tab class names
   const getTabClasses = (tabName) =>
     `${
       activeTab === tabName
@@ -115,10 +109,8 @@ function DashBoard() {
         : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
     } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition duration-150 ease-in-out`;
 
-  // Render logic for content in table body
   const renderTableContent = () => {
-    // ... (Loader, Error, and No Posts logic remains the same) ...
-    if (loading) {
+    if (isLoading) {
       return (
         <tr>
           <td colSpan="5" className="py-12 text-center">
@@ -129,14 +121,14 @@ function DashBoard() {
       );
     }
 
-    if (error) {
+    if (queryError) {
       return (
         <tr>
           <td
             colSpan="5"
             className="px-6 py-4 text-sm text-center text-red-600"
           >
-            Error: {error}
+            Error: {queryError.message}
           </td>
         </tr>
       );
@@ -157,14 +149,13 @@ function DashBoard() {
 
     return filteredAndSortedBlogs.map((blog) => (
       <tr
-        key={blog._id || blog.id}
+        key={blog._id}
         className="bg-white hover:bg-gray-50 transition duration-100 ease-in-out"
       >
         <td className="px-6 py-4 text-sm font-medium text-gray-900">
           {blog.title || "Untitled Post"}
         </td>
         <td className="px-6 py-4">
-          {/* Status Badge */}
           <span
             className={`inline-flex items-center px-3 py-1 text-xs font-medium rounded-full ${
               blog.status === "published"
@@ -203,7 +194,6 @@ function DashBoard() {
             <button
               type="button"
               className="text-red-600 cursor-pointer hover:text-red-800 transition"
-              // 3. Pass title to the delete handler
               onClick={() => handleDelete(blog._id, blog.title)}
             >
               Delete
@@ -217,11 +207,9 @@ function DashBoard() {
   return (
     <main className="flex justify-center flex-1 py-8">
       <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        {/* Header, Search, and Sort Controls */}
         <div className="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
           <h1 className="text-3xl font-bold sm:text-4xl">Dashboard</h1>
           <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:gap-4">
-            {/* Search Input */}
             <div className="relative w-full sm:max-w-xs">
               <CiSearch
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -235,7 +223,6 @@ function DashBoard() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            {/* Sort Dropdown */}
             <div className="relative w-full sm:w-auto">
               <select
                 className="w-full py-2 pl-3 pr-8 text-sm border rounded-lg appearance-none border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500 transition duration-150"
@@ -255,7 +242,6 @@ function DashBoard() {
           </div>
         </div>
 
-        {/* Tab Navigation */}
         <div className="mb-4 border-b border-gray-200">
           <nav className="flex -mb-px space-x-8" aria-label="Tabs">
             <button
@@ -273,7 +259,6 @@ function DashBoard() {
           </nav>
         </div>
 
-        {/* Posts Table */}
         <div className="overflow-x-auto border rounded-lg shadow-sm border-gray-200 bg-white">
           <table className="w-full min-w-[640px] text-left">
             <thead className="border-b border-gray-200 bg-gray-50">

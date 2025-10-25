@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const { firebaseAuth } = require("../middleware/authFirebase");
 const commentsController = require("../controllers/comments-controller");
+const { Limiter } = require("../middleware/rateLimiters");
 
-router.get("/", commentsController.getComments);
+router.get("/", firebaseAuth, commentsController.getComments);
 
-router.post("/", firebaseAuth, commentsController.createComment);
+router.post("/", Limiter, firebaseAuth, commentsController.createComment);
 
-router.delete("/:id", firebaseAuth, commentsController.deleteComment);
+router.delete("/:id", Limiter, firebaseAuth, commentsController.deleteComment);
 
 module.exports = router;

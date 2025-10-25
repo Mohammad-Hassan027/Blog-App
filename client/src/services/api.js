@@ -25,9 +25,16 @@ export async function fetchWithAuth(endpoint, options = {}) {
     headers,
   });
 
+  // if (!response.ok) {
+  //   const error = await response.json().catch(() => ({}));
+  //   throw new Error(error.message || "Network response was not ok");
+  // }
+
   if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || "Network response was not ok");
+    const errorBody = await response.json().catch(() => ({}));
+    const error = new Error(errorBody.message || "Network response was not ok");
+    error.status = response.status;
+    throw error;
   }
 
   // Return null for 204 No Content (e.g., successful DELETE)

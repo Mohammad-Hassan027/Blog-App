@@ -4,9 +4,24 @@ const Blog = require("../models/Blog");
 async function getComments(req, res) {
   try {
     const { blogId } = req.query;
+    if (blogId && typeof blogId !== "string") {
+      return res.status(400).json({ error: "Invalid blogId" });
+    }
     const filter = {};
     if (blogId) filter.blogId = blogId;
     const comments = await Comment.find(filter).sort({ createdAt: -1 }).lean();
+    const blog = await Blog.findOne({ _id: { $eq: blogId } });
+    if (blog.status !== "published") {
+      if (
+        !req.user ||
+        (req.user.name !== blog.author && req.user.email !== blog.author)
+      ) {
+        return res.status(403).json({
+          error:
+            "Not authorized to view comments of this blog post as it is not published",
+        });
+      }
+    }
     res.json(comments);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch comments" });
@@ -16,9 +31,12 @@ async function getComments(req, res) {
 async function createComment(req, res) {
   try {
     const { blogId, author, text, avatar } = req.body;
-    if (!blogId || !text)
+    if (!blogId || !text) {
       return res.status(400).json({ error: "Missing fields" });
-
+    }
+    if (blogId && typeof blogId !== "string") {
+      return res.status(400).json({ error: "Invalid blogId" });
+    }
     const blog = await Blog.findById(blogId);
     if (!blog) return res.status(404).json({ error: "Blog not found" });
 

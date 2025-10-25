@@ -6,6 +6,7 @@ const os = require("os");
 const fs = require("fs");
 const { firebaseAuth } = require("../middleware/authFirebase");
 const blogsController = require("../controllers/blogs-controller");
+const { Limiter } = require("../middleware/rateLimiters");
 
 // Ensure cross-platform temporary upload directory
 const tmpDir = path.join(os.tmpdir(), "blog-app-uploads");
@@ -17,12 +18,13 @@ const upload = multer({ dest: tmpDir });
 
 router.get("/", blogsController.getBlogs);
 
-router.get("/my-posts", firebaseAuth, blogsController.getMyPosts);
+router.get("/my-posts", Limiter, firebaseAuth, blogsController.getMyPosts);
 
-router.get("/:id", blogsController.getBlogById);
+router.get("/:id", firebaseAuth, blogsController.getBlogById);
 
 router.post(
   "/",
+  Limiter,
   firebaseAuth,
   upload.single("image"),
   blogsController.createBlog
@@ -30,11 +32,12 @@ router.post(
 
 router.put(
   "/:id",
+  Limiter,
   firebaseAuth,
   upload.single("image"),
   blogsController.updateBlog
 );
 
-router.delete("/:id", firebaseAuth, blogsController.deleteBlog);
+router.delete("/:id", Limiter, firebaseAuth, blogsController.deleteBlog);
 
 module.exports = router;

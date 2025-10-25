@@ -1,14 +1,17 @@
-const EMPTY_COMMENTS = Object.freeze([]);
 import { useEffect, useState } from "react";
-import useBlogStore from "../store/useBlogStore";
 import useAuthStore from "../store/useAuthStore";
+import {
+  useComments,
+  useAddComment,
+  useDeleteComment,
+} from "../hooks/commentHooks";
 import Swal from "sweetalert2";
 
 function CommentSection({ id, author }) {
-  const comments =
-    useBlogStore((state) => state.currentBlogComments) || EMPTY_COMMENTS;
-  const addComment = useBlogStore((state) => state.addComment);
-  const deleteComment = useBlogStore((state) => state.deleteComment);
+  // Use TanStack Query hooks for comments
+  const { data: comments = [] } = useComments(id);
+  const addCommentMutation = useAddComment(id);
+  const deleteCommentMutation = useDeleteComment(id);
 
   const [commentText, setCommentText] = useState("");
   const [commentAuthor, setCommentAuthor] = useState("");
@@ -83,7 +86,7 @@ function CommentSection({ id, author }) {
                         })
                         .then((result) => {
                           if (result.isConfirmed) {
-                            deleteComment(id, c._id);
+                            deleteCommentMutation.mutate(c._id);
                             Swal.fire({
                               width: 370,
                               toast: true,
@@ -148,7 +151,7 @@ function CommentSection({ id, author }) {
               onClick={() => {
                 const text = commentText.trim();
                 if (!text) return;
-                addComment(id, { text });
+                addCommentMutation.mutate({ text });
                 setCommentText("");
                 if (!user) setCommentAuthor("");
                 Swal.fire({

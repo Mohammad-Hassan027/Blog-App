@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
-import useBlogStore from "../../store/useBlogStore";
+import { useCreatePost } from "../../hooks/blogHooks";
 import { getImageDataUrl } from "../../utils/image";
 import MarkdownRules from "../../components/MarkdownRules";
 import MarkdownEditor from "../../components/MarkdownEditor";
@@ -13,7 +13,11 @@ const MAX_IMAGE_SIZE_MB = 5;
 function CreatePost() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { createPost, loading, error } = useBlogStore();
+  const {
+    mutateAsync: createPost,
+    isLoading: loading,
+    error,
+  } = useCreatePost();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
