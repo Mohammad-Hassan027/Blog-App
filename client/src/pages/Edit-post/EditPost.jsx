@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
-import useBlogStore from "../../store/useBlogStore";
+import { usePost, useUpdatePost } from "../../hooks/blogHooks";
 import { uploadToCloudinary } from "../../utils/cloudinary";
 import MarkdownRules from "../../components/MarkdownRules";
 import MarkdownEditor from "../../components/MarkdownEditor";
@@ -14,18 +14,58 @@ function EditPost() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { fetchBlogById, updatePost, loading, error } = useBlogStore();
+
+  // Fetch post data using TanStack Query
+  // Fetch post data with error handling
+  const {
+    data: post,
+    isLoading: fetchLoading,
+    error: fetchError,
+  } = usePost(id, {
+    onError: (error) => {
+      if (error.status === 403) {
+        navigate("/dashboard", {
+          replace: true,
+          state: { error: "You don't have permission to edit this post" },
+        });
+      }
+    },
+  });
+
+  // Initialize update mutation
+  const {
+    mutateAsync: updatePost,
+    isLoading: updateLoading,
+    error: updateError,
+  } = useUpdatePost();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [initialImageUrl, setInitialImageUrl] = useState(""); // To track if the image has changed
+  const [initialImageUrl, setInitialImageUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [formError, setFormError] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [tags, setTags] = useState([]);
   const [status, setStatus] = useState("published");
 
+  // Check post ownership
+  useEffect(() => {
+    if (
+      post &&
+      user &&
+      post.author !== user.email &&
+      post.author !== user.displayName
+    ) {
+      navigate("/dashboard", {
+        replace: true,
+        state: { error: "You don't have permission to edit this post" },
+      });
+    }
+  }, [post, user, navigate]);
+
+  const loading = fetchLoading || updateLoading;
+  const error = fetchError || updateError;
   const isActionActive = loading || isUploading;
 
   const tagOptions = [
@@ -43,28 +83,16 @@ function EditPost() {
   const availableTagOptions = tagOptions.filter((tag) => !tags.includes(tag));
 
   useEffect(() => {
-    const loadPost = async () => {
-      try {
-        const post = await fetchBlogById(id);
-        if (post) {
-          setTitle(post.title || "");
-          setContent(post.content || "");
-          setImageUrl(post.imageUrl || "");
-          setImagePreview(post.imageUrl || "");
-          setInitialImageUrl(post.imageUrl || "");
-          setTags(post.tag || []);
-          setStatus(post.status || "published");
-        }
-      } catch (err) {
-        setFormError("Failed to load post for editing.");
-        console.error("Error loading post:", err);
-      }
-    };
-
-    if (id) {
-      loadPost();
+    if (post) {
+      setTitle(post.title || "");
+      setContent(post.content || "");
+      setImageUrl(post.imageUrl || "");
+      setImagePreview(post.imageUrl || "");
+      setInitialImageUrl(post.imageUrl || "");
+      setTags(post.tag || []);
+      setStatus(post.status || "published");
     }
-  }, [id, fetchBlogById]);
+  }, [post]);
 
   const clearImageStates = () => {
     setImageUrl("");
@@ -146,6 +174,14 @@ function EditPost() {
     }
 
     try {
+      // Verify user has permission to edit
+      if (
+        !user ||
+        (post.author !== user.email && post.author !== user.displayName)
+      ) {
+        throw new Error("You don't have permission to edit this post");
+      }
+
       const postData = {
         title: title.trim(),
         content: content,
@@ -156,17 +192,29 @@ function EditPost() {
         status: newStatus,
       };
 
-      await updatePost(id, postData);
-      navigate("/dashboard");
+      await updatePost({ id, postData });
+      navigate("/dashboard", {
+        state: { success: "Post updated successfully" },
+      });
     } catch (err) {
       setFormError(err.message || "Failed to update post");
+      if (err.status === 403) {
+        navigate("/dashboard", {
+          replace: true,
+          state: { error: "You don't have permission to edit this post" },
+        });
+      }
     }
   };
 
-  if (!title && !error && loading) {
+  // Show loading state while fetching post
+  if (fetchLoading && !post) {
     return (
       <main className="flex-1 py-6 sm:py-10 md:py-18 text-center text-gray-500">
-        <p>Loading post data...</p>
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/4 mx-auto mb-4"></div>
+          <p className="text-sm">Loading post data...</p>
+        </div>
       </main>
     );
   }
@@ -185,9 +233,18 @@ function EditPost() {
                 {status.toUpperCase()}**
               </p>
             </div>
-            {(error || formError) && (
+            {/* Show error messages */}
+            {(error?.message || formError) && (
               <div className="p-3 text-sm text-red-500 bg-red-100 rounded">
-                {error || formError}
+                {error?.message || formError}
+              </div>
+            )}
+
+            {/* Show draft status warning */}
+            {post?.status === "draft" && (
+              <div className="p-3 text-sm text-yellow-700 bg-yellow-100 rounded">
+                You are editing a draft post. Publishing will make it visible to
+                everyone.
               </div>
             )}
             <form

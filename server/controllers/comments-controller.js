@@ -10,7 +10,7 @@ async function getComments(req, res) {
     const filter = {};
     if (blogId) filter.blogId = blogId;
     const comments = await Comment.find(filter).sort({ createdAt: -1 }).lean();
-    const blog = await Blog.findById(blogId);
+    const blog = await Blog.findOne({ _id: { $eq: blogId } });
     if (blog.status !== "published") {
       if (
         !req.user ||

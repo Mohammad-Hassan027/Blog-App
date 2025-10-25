@@ -1,8 +1,10 @@
 import { useRoutes } from "react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   AuthProvider,
   PrivateRoute,
   AuthRoute,
+  ConditionalPrivateRoute,
 } from "./components/AuthProvider";
 import Layout from "./components/Layout";
 import Home from "./pages/Home/Home";
@@ -17,6 +19,14 @@ import DashBoard from "./pages/Dashboard";
 import EditPost from "./pages/Edit-post/EditPost";
 import Profile from "./pages/Profile/Profile";
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    },
+  },
+});
+
 function Routes() {
   const element = useRoutes([
     {
@@ -29,7 +39,12 @@ function Routes() {
         },
         {
           path: "/post/:id",
-          element: <SinglePost />,
+          element: (
+            // <ConditionalPrivateRoute>
+            //   <SinglePost />
+            // </ConditionalPrivateRoute>
+            <SinglePost />
+          ),
         },
         {
           path: "create",
@@ -99,9 +114,11 @@ function Routes() {
 
 function App() {
   return (
-    <AuthProvider>
-      <Routes />
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 

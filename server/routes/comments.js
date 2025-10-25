@@ -4,7 +4,7 @@ const { firebaseAuth } = require("../middleware/authFirebase");
 const commentsController = require("../controllers/comments-controller");
 const { Limiter } = require("../middleware/rateLimiters");
 
-router.get("/", Limiter, firebaseAuth, commentsController.getComments);
+router.get("/", firebaseAuth, commentsController.getComments);
 
 router.post("/", Limiter, firebaseAuth, commentsController.createComment);
 
