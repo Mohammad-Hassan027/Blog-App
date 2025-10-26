@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useAuthStore from "../../store/useAuthStore";
 import { uploadToCloudinary } from "../../utils/cloudinary";
+import { isValidUrl } from "../../utils/ValidateData";
 
 export default function Profile() {
   const { user, updateProfile, loading, error } = useAuthStore();
@@ -147,7 +148,7 @@ export default function Profile() {
                 </label>
               </div>
 
-              {photoURL && (
+              {photoURL && isValidUrl(photoURL) && (
                 <div className="flex items-center mt-2">
                   <img
                     src={photoURL}

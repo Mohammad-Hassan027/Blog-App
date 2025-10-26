@@ -4,6 +4,10 @@ const { cloudinary, uploadImage } = require("../utils/cloudinary");
 const fs = require("fs").promises;
 const os = require("os");
 const path = require("path");
+const {
+  isValidObjectId,
+  getRequestingUserUID,
+} = require("../utils/controllerUtils");
 
 const TEMP_UPLOAD_ROOT = path.join(os.tmpdir(), "blog-app-uploads");
 
@@ -58,7 +62,6 @@ function normalizeDate(dateInput) {
   return isNaN(date.getTime()) ? undefined : date;
 }
 
-
 async function getBlogs(req, res) {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -91,7 +94,7 @@ async function getMyPosts(req, res) {
   if (!checkAuth(req, res)) return;
 
   try {
-    const requestingUserUID = req.user.uid;
+    const requestingUserUID = getRequestingUserUID(req);
 
     const blogs = await Blog.find({
       authorUID: requestingUserUID,
@@ -108,10 +111,15 @@ async function getMyPosts(req, res) {
 
 async function getBlogById(req, res) {
   try {
-    const blog = await Blog.findById(req.params.id).lean();
+    const blogId = req.params.id;
+    if (!blogId || !isValidObjectId(blogId)) {
+      return res.status(400).json({ error: "Invalid or missing blogId" });
+    }
+
+    const blog = await Blog.findById(blogId).lean();
     if (!blog) return res.status(404).json({ error: "Not found" });
 
-    const requestingUserUID = req.user ? req.user.uid : null;
+    const requestingUserUID = getRequestingUserUID(req);
     const authorUID = blog.authorUID || null;
 
     if (blog.status !== "published") {
@@ -183,12 +191,16 @@ async function updateBlog(req, res) {
   if (!checkAuth(req, res)) return;
 
   let tempFilePath = req.file ? req.file.path : null;
+  const { blogId } = req.params;
+  if (!blogId || !isValidObjectId(blogId)) {
+    return res.status(400).json({ error: "Invalid or missing blogId" });
+  }
 
   try {
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findById(blogId);
     if (!blog) return res.status(404).json({ error: "Blog not found" });
 
-    const requestingUserUID = req.user.uid;
+    const requestingUserUID = getRequestingUserUID(req);
     const authorUID = blog.authorUID || null;
 
     if (requestingUserUID !== authorUID) {
@@ -219,24 +231,24 @@ async function updateBlog(req, res) {
     const tagsUpdate = normalizeTags(req.body.tag);
     const createdAtUpdate = normalizeDate(req.body.createdAt);
 
-    const updateFields = {
-      title: req.body.title,
-      description: req.body.description,
-      content: req.body.content,
-      imageUrl: imageUrl,
-      imagePublicId: imagePublicId,
-      status: req.body.status || blog.status,
-    };
+    const updateFields = {};
+
+    if (req.body.title !== undefined) updateFields.title = req.body.title;
+    if (req.body.description !== undefined)
+      updateFields.description = req.body.description;
+    if (req.body.content !== undefined) updateFields.content = req.body.content;
+
+    updateFields.imageUrl = imageUrl;
+    updateFields.imagePublicId = imagePublicId;
+    updateFields.status = req.body.status || blog.status;
 
     // Only include tags/createdAt if they were provided in the request
     if (tagsUpdate !== undefined) updateFields.tag = tagsUpdate;
     if (createdAtUpdate !== undefined) updateFields.createdAt = createdAtUpdate;
 
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      req.params.id,
-      updateFields,
-      { new: true }
-    );
+    const updatedBlog = await Blog.findByIdAndUpdate(blogId, updateFields, {
+      new: true,
+    });
 
     res.json(updatedBlog);
   } catch (err) {
@@ -249,12 +261,16 @@ async function updateBlog(req, res) {
 
 async function deleteBlog(req, res) {
   if (!checkAuth(req, res)) return;
+  const { blogId } = req.params;
+  if (!blogId || !isValidObjectId(blogId)) {
+    return res.status(400).json({ error: "Invalid or missing blogId" });
+  }
 
   try {
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findById(blogId);
     if (!blog) return res.status(404).json({ error: "Blog not found" });
 
-    const requestingUserUID = req.user.uid;
+    const requestingUserUID = getRequestingUserUID(req);
     const authorUID = blog.authorUID || null;
 
     if (requestingUserUID !== authorUID) {
@@ -281,7 +297,7 @@ async function deleteBlog(req, res) {
       console.error("Failed to delete associated comments:", err);
     }
 
-    await Blog.findByIdAndDelete(req.params.id);
+    await Blog.findByIdAndDelete(blogId);
     res.status(204).send();
   } catch (err) {
     console.error("DELETE /api/blogs/:id error:", err);

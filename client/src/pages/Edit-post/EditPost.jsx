@@ -6,6 +6,7 @@ import { uploadToCloudinary } from "../../utils/cloudinary";
 import MarkdownRules from "../../components/MarkdownRules";
 import MarkdownEditor from "../../components/MarkdownEditor";
 import generateDescription from "../../utils/genDesc";
+import { isValidUrl } from "../../utils/ValidateData";
 
 const MAX_TAGS = 5;
 const MAX_IMAGE_SIZE_MB = 5;
@@ -355,7 +356,7 @@ function EditPost() {
                     {MAX_IMAGE_SIZE_MB}MB
                   </p>
                 </div>
-                {imagePreview && (
+                {imagePreview && isValidUrl(imagePreview) && (
                   <div className="relative mt-2">
                     <img
                       src={imagePreview}

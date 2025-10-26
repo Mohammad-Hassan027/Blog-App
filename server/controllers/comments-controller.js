@@ -1,15 +1,10 @@
 const Comment = require("../models/Comment");
 const Blog = require("../models/Blog");
 const mongoose = require("mongoose");
-
-function isValidObjectId(id) {
-  return typeof id === "string" && mongoose.Types.ObjectId.isValid(id);
-}
-
-function getRequestingUserUID(req) {
-  return req.user ? req.user.uid : null;
-}
-
+const {
+  isValidObjectId,
+  getRequestingUserUID,
+} = require("../utils/controllerUtils");
 
 async function getComments(req, res) {
   try {
