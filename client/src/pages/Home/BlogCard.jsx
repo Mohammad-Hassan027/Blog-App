@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 
 function BlogCard({ blog }) {
   const { title, description, createdAt } = blog;
-  const postId = blog._id || blog.id;
+  const postId = blog._id;
   return (
-    <div className="flex flex-col p-6 transition-shadow duration-300 shadow-md bg-blue-50 rounded-xl hover:shadow-xl">
+    <div className="flex flex-col p-6 transition-shadow duration-300 shadow-md bg-blue-50/45 rounded-xl hover:shadow-xl">
       <span className="text-sm text-gray-500">
         {new Date(createdAt).toLocaleDateString()}
       </span>

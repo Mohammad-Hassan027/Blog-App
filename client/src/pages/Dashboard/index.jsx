@@ -16,7 +16,6 @@ function DashBoard() {
   const [sortOrder, setSortOrder] = useState("date-desc");
   const [activeTab, setActiveTab] = useState("published");
 
-  // Use TanStack Query hooks for data fetching and mutations
   const { data: blogs = [], isLoading, error: queryError } = useMyPosts();
   const deletePostMutation = useDeletePost();
 

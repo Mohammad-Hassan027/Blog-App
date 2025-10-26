@@ -29,7 +29,7 @@ function Footer() {
               Share your stories, ideas, and expertise with the world.
             </p>
             <div className="flex gap-4">
-              <a
+              <Link
                 href="https://github.com/Mohammad-Hassan027"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -37,8 +37,8 @@ function Footer() {
                 aria-label="GitHub"
               >
                 <FaGithub size={20} />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -46,8 +46,8 @@ function Footer() {
                 aria-label="Twitter"
               >
                 <FaTwitter size={20} />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="https://www.linkedin.com/in/mohammad-hassan-shaikh-750791352?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -55,7 +55,7 @@ function Footer() {
                 aria-label="LinkedIn"
               >
                 <FaLinkedin size={20} />
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -107,36 +107,36 @@ function Footer() {
             </h3>
             <ul className="space-y-3">
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Technology
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Programming
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   AI & Machine Learning
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Web Development
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -148,36 +148,36 @@ function Footer() {
             </h3>
             <ul className="space-y-3">
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Terms of Service
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   Cookie Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
                 >
                   GDPR
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -188,23 +188,23 @@ function Footer() {
           <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Photos: Unsplash —
-              <a
+              <Link
                 href="https://unsplash.com/photos/photo-1506765515384-028b60a970df"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-1 underline"
               >
                 Hero image
-              </a>
+              </Link>
               ,
-              <a
+              <Link
                 href="https://unsplash.com/photos/photo-1518770660439-4636190af475"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-1 underline"
               >
                 Featured image
-              </a>
+              </Link>
             </p>
 
             <p className="text-sm text-center text-gray-600 dark:text-gray-400">

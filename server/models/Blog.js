@@ -4,7 +4,7 @@ const BlogSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: String,
   content: String,
-  // authorUID: { type: String, required: true },
+  authorUID: { type: String, required: true },
   author: String,
   imageUrl: String,
   imagePublicId: String,

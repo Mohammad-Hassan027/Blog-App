@@ -284,12 +284,11 @@ function CreatePost() {
                         className={`hidden`}
                         accept="image/*"
                         onChange={handleFileUpload}
-                        disabled={isFileDisabled} // Already correct
+                        disabled={isFileDisabled}
                       />
                       <label
                         htmlFor="image-upload"
                         className={`inline-flex items-center px-4 py-3 rounded bg-gray-100 hover:bg-gray-200 text-sm font-medium ${
-                          // Updated conditional class check:
                           isFileDisabled
                             ? "opacity-50 cursor-not-allowed"
                             : "cursor-pointer hover:bg-gray-200"

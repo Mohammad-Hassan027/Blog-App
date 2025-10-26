@@ -15,8 +15,6 @@ function EditPost() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
-  // Fetch post data using TanStack Query
-  // Fetch post data with error handling
   const {
     data: post,
     isLoading: fetchLoading,
@@ -32,7 +30,6 @@ function EditPost() {
     },
   });
 
-  // Initialize update mutation
   const {
     mutateAsync: updatePost,
     isLoading: updateLoading,
@@ -49,14 +46,8 @@ function EditPost() {
   const [tags, setTags] = useState([]);
   const [status, setStatus] = useState("published");
 
-  // Check post ownership
   useEffect(() => {
-    if (
-      post &&
-      user &&
-      post.author !== user.email &&
-      post.author !== user.displayName
-    ) {
+    if (post && user && post.authorUID !== user.uid) {
       navigate("/dashboard", {
         replace: true,
         state: { error: "You don't have permission to edit this post" },
@@ -174,11 +165,7 @@ function EditPost() {
     }
 
     try {
-      // Verify user has permission to edit
-      if (
-        !user ||
-        (post.author !== user.email && post.author !== user.displayName)
-      ) {
+      if (!user || post.authorUID !== user.uid) {
         throw new Error("You don't have permission to edit this post");
       }
 
@@ -207,7 +194,6 @@ function EditPost() {
     }
   };
 
-  // Show loading state while fetching post
   if (fetchLoading && !post) {
     return (
       <main className="flex-1 py-6 sm:py-10 md:py-18 text-center text-gray-500">
