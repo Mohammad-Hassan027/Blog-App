@@ -6,6 +6,7 @@ import { getImageDataUrl } from "../../utils/image";
 import MarkdownRules from "../../components/MarkdownRules";
 import MarkdownEditor from "../../components/MarkdownEditor";
 import generateDescription from "../../utils/genDesc";
+import { isValidUrl } from "../../utils/ValidateData";
 
 const MAX_TAGS = 5;
 const MAX_IMAGE_SIZE_MB = 5;
@@ -284,12 +285,11 @@ function CreatePost() {
                         className={`hidden`}
                         accept="image/*"
                         onChange={handleFileUpload}
-                        disabled={isFileDisabled} // Already correct
+                        disabled={isFileDisabled}
                       />
                       <label
                         htmlFor="image-upload"
                         className={`inline-flex items-center px-4 py-3 rounded bg-gray-100 hover:bg-gray-200 text-sm font-medium ${
-                          // Updated conditional class check:
                           isFileDisabled
                             ? "opacity-50 cursor-not-allowed"
                             : "cursor-pointer hover:bg-gray-200"
@@ -304,7 +304,7 @@ function CreatePost() {
                     {MAX_IMAGE_SIZE_MB}MB
                   </p>
                 </div>
-                {imagePreview && (
+                {imagePreview && isValidUrl(imagePreview) && (
                   <div className="relative mt-2">
                     <img
                       src={imagePreview}

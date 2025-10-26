@@ -7,8 +7,7 @@ import {
 } from "../hooks/commentHooks";
 import Swal from "sweetalert2";
 
-function CommentSection({ id, author }) {
-  // Use TanStack Query hooks for comments
+function CommentSection({ id, BlogAuthorUID }) {
   const { data: comments = [] } = useComments(id);
   const addCommentMutation = useAddComment(id);
   const deleteCommentMutation = useDeleteComment(id);
@@ -59,10 +58,7 @@ function CommentSection({ id, author }) {
                   </p>
                 </div>
                 <p className="mt-1 text-base text-gray-700">{c.text}</p>
-                {(user?.email === c.author ||
-                  user?.email === author ||
-                  user?.displayName === c.author ||
-                  user?.displayName === author) && (
+                {(user?.uid === c.authorUID || user?.uid === BlogAuthorUID) && (
                   <button
                     onClick={() => {
                       const swalWithBootstrapButtons = Swal.mixin({

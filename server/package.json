@@ -8,7 +8,8 @@
     "start": "node index.js",
     "seed": "node scripts/seedDatabase.js",
     "migrate:status": "node scripts/migrateStatus.js",
-    "migrate:image-ids": "node scripts/migrateImagePublicIds.js"
+    "migrate:image-ids": "node scripts/migrateImagePublicIds.js",
+    "migrate:author-uids": "node scripts/migrateAuthorUID.js"
   },
   "keywords": [],
   "author": "Mohammad Hassan",

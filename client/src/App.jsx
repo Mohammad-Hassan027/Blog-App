@@ -4,7 +4,6 @@ import {
   AuthProvider,
   PrivateRoute,
   AuthRoute,
-  ConditionalPrivateRoute,
 } from "./components/AuthProvider";
 import Layout from "./components/Layout";
 import Home from "./pages/Home/Home";
@@ -40,9 +39,6 @@ function Routes() {
         {
           path: "/post/:id",
           element: (
-            // <ConditionalPrivateRoute>
-            //   <SinglePost />
-            // </ConditionalPrivateRoute>
             <SinglePost />
           ),
         },

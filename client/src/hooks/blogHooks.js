@@ -15,13 +15,6 @@ const queryKeys = {
   comments: (postId) => ["comments", postId],
 };
 
-// NOTE: You would typically check for auth readiness here, but since this
-// environment doesn't allow external hook dependencies easily, we assume
-// the API functions handle authentication and we run the query right away.
-
-/**
- * Fetches all blog posts with optional pagination.
- */
 export function usePosts(page = 1, limit = 10) {
   return useQuery({
     queryKey: queryKeys.posts(page, limit),
@@ -43,7 +36,6 @@ export function usePost(id, options = {}) {
       try {
         return await getPost(id);
       } catch (error) {
-        // Handle 403 Forbidden specifically for draft posts
         if (error.status === 403) {
           throw new Error("You don't have permission to view this post");
         }

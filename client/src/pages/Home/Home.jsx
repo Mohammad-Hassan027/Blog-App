@@ -3,8 +3,7 @@ import BlogCard from "./BlogCard";
 import { usePosts } from "../../hooks/blogHooks";
 
 function Home() {
-  // Use TanStack Query hook to fetch posts
-  const { data, isLoading, error } = usePosts(1, 6); // Get first 6 posts for homepage
+  const { data, isLoading, error } = usePosts(1, 6);
   const blogs = data?.blogs || [];
 
   return (
@@ -42,7 +41,7 @@ function Home() {
             Featured Post
           </h2>
           <div className="@container">
-            <div className="grid grid-cols-1 @[640px]:grid-cols-2 gap-8 items-center bg-blue-50 p-8 rounded-xl shadow-lg overflow-hidden">
+            <div className="grid grid-cols-1 @[640px]:grid-cols-2 gap-8 items-center bg-blue-50/45 p-8 rounded-xl shadow-lg overflow-hidden">
               <div className="order-2 @[640px]:order-1">
                 <h3 className="text-2xl font-bold text-gray-900">
                   The Rise of Quantum Computing
@@ -88,7 +87,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="py-16 sm:py-24 bg-gray-50">
+      <section className="py-16 sm:py-24">
         <div className="container px-4 mx-auto sm:px-6 lg:px-8">
           <div className="flex flex-col items-start justify-between mb-12 md:flex-row md:items-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900">
@@ -118,10 +117,9 @@ function Home() {
           </div>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {isLoading ? (
-              // Loading skeleton grid
               [...Array(6)].map((_, i) => (
                 <div key={i} className="animate-pulse">
-                  <div className="w-full h-48 bg-gray-200 rounded-lg mb-4"></div>
+                  <div className="w-full h-52 bg-gray-200 rounded-lg mb-4"></div>
                   <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
                   <div className="h-3 bg-gray-200 rounded w-1/2"></div>
                 </div>

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const CommentSchema = new mongoose.Schema({
   blogId: { type: mongoose.Schema.Types.ObjectId, ref: "Blog", required: true },
   author: { type: String, default: "Anonymous" },
+  authorUID: { type: String, required: true },
   text: { type: String, required: true },
   avatar: String,
   date: { type: Date, default: Date.now },

@@ -6,9 +6,6 @@ import {
 } from "../services/blogService";
 import { queryKeys } from "./blogHooks";
 
-/**
- * Fetches comments for a specific post.
- */
 export function useComments(postId) {
   return useQuery({
     queryKey: queryKeys.comments(postId),
@@ -16,7 +13,6 @@ export function useComments(postId) {
       try {
         return await getComments(postId);
       } catch (error) {
-        // If the post is a draft or inaccessible, comments should not be available
         if (error.status === 403) {
           throw new Error("Comments are not available for this post");
         }
@@ -27,9 +23,6 @@ export function useComments(postId) {
   });
 }
 
-/**
- * Adds a comment to a post.
- */
 export function useAddComment(postId) {
   const queryClient = useQueryClient();
   return useMutation({
@@ -37,7 +30,6 @@ export function useAddComment(postId) {
       try {
         return await addComment(postId, comment);
       } catch (error) {
-        // Prevent commenting on draft or inaccessible posts
         if (error.status === 403) {
           throw new Error("You cannot comment on this post");
         }
@@ -51,9 +43,6 @@ export function useAddComment(postId) {
   });
 }
 
-/**
- * Deletes a comment.
- */
 export function useDeleteComment(postId) {
   const queryClient = useQueryClient();
   return useMutation({
