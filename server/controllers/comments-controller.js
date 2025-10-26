@@ -1,6 +1,5 @@
 const Comment = require("../models/Comment");
 const Blog = require("../models/Blog");
-const mongoose = require("mongoose");
 const {
   isValidObjectId,
   getRequestingUserUID,
