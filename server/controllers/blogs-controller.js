@@ -261,7 +261,7 @@ async function updateBlog(req, res) {
 
 async function deleteBlog(req, res) {
   if (!checkAuth(req, res)) return;
-  const { blogId } = req.params;
+  const blogId = req.params.id;
   if (!blogId || !isValidObjectId(blogId)) {
     return res.status(400).json({ error: "Invalid or missing blogId" });
   }
