@@ -3,7 +3,7 @@ import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className="border-t bg-linear-to-b from-white to-blue-50 border-gray-200/80 dark:from-gray-900 dark:to-gray-800 dark:border-gray-700/50">
+    <footer className="border-t border-gray-200/80">
       <div className="container px-4 py-12 mx-auto sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* Brand section */}
@@ -21,11 +21,9 @@ function Footer() {
                   fill="currentColor"
                 />
               </svg>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Bloggr
-              </h2>
+              <h2 className="text-xl font-bold text-gray-900">Bloggr</h2>
             </Link>
-            <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-sm text-gray-600">
               Share your stories, ideas, and expertise with the world.
             </p>
             <div className="flex gap-4">
@@ -69,6 +67,9 @@ function Footer() {
                 <Link
                   to="/"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                 >
                   Home
                 </Link>
@@ -77,6 +78,9 @@ function Footer() {
                 <Link
                   to="/about"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                 >
                   About Us
                 </Link>
@@ -85,6 +89,9 @@ function Footer() {
                 <Link
                   to="/contact"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                 >
                   Contact
                 </Link>
@@ -93,6 +100,9 @@ function Footer() {
                 <Link
                   to="/all-posts"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                 >
                   All Posts
                 </Link>
@@ -184,9 +194,9 @@ function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 mt-12 border-t border-gray-200/80 dark:border-gray-700/50">
+        <div className="pt-8 mt-12 border-t border-gray-200/80">
           <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600">
               Photos: Unsplash —
               <Link
                 href="https://unsplash.com/photos/photo-1506765515384-028b60a970df"
@@ -207,7 +217,7 @@ function Footer() {
               </Link>
             </p>
 
-            <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-center text-gray-600">
               © {new Date().getFullYear()} Bloggr. All rights reserved.
             </p>
           </div>

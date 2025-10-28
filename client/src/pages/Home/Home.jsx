@@ -118,10 +118,21 @@ function Home() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {isLoading ? (
               [...Array(6)].map((_, i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="w-full h-52 bg-gray-200 rounded-lg mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                <div
+                  className="flex flex-col p-8 transition-shadow duration-300 shadow-md bg-blue-50/45 rounded-xl animate-pulse h-full"
+                  key={i}
+                >
+                  <div className="w-1/4 h-4 bg-gray-200 rounded"></div>
+
+                  <div className="mt-4 w-3/4 h-6 bg-gray-200 rounded"></div>
+
+                  <div className="mt-4 w-full h-4 bg-gray-200 rounded grow"></div>
+                  <div className="mt-4 w-full h-4 bg-gray-200 rounded grow"></div>
+                  <div className="mt-2 w-11/12 h-4 bg-gray-200 rounded"></div>
+                  <div className="mt-2 w-11/12 h-4 bg-gray-200 rounded"></div>
+                  <div className="mt-2 w-5/6 h-4 bg-gray-200 rounded"></div>
+
+                  <div className="mt-4 w-1/5 h-3 bg-blue-200 rounded"></div>
                 </div>
               ))
             ) : error ? (
