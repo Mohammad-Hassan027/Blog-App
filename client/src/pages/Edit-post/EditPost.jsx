@@ -208,11 +208,11 @@ function EditPost() {
 
   return (
     <>
-      <main className="flex-1 py-6 shadow-2xl sm:py-10 md:py-18 rounded-2xl">
-        <div className="max-w-xl px-4 mx-auto">
+      <main className="flex-1 py-6 shadow-2xs sm:py-10 md:py-18 rounded-2xl">
+        <div className="max-w-xl px-4 md:px-8 mx-auto">
           <div className="space-y-6 md:space-y-8">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              <h1 className="text-2xl text-gray-900 font-bold tracking-tight sm:text-3xl">
                 Edit Post
               </h1>
               <p className="mt-2 text-[#566879] dark:text-[#a0a9b4]">
@@ -220,14 +220,11 @@ function EditPost() {
                 {status.toUpperCase()}**
               </p>
             </div>
-            {/* Show error messages */}
             {(error?.message || formError) && (
               <div className="p-3 text-sm text-red-500 bg-red-100 rounded">
                 {error?.message || formError}
               </div>
             )}
-
-            {/* Show draft status warning */}
             {post?.status === "draft" && (
               <div className="p-3 text-sm text-yellow-700 bg-yellow-100 rounded">
                 You are editing a draft post. Publishing will make it visible to

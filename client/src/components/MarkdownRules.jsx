@@ -36,10 +36,10 @@ const MarkdownRules = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 font-sans md:p-10">
-      <h1 className="mb-2 text-2xl font-extrabold text-gray-900 md:text-3xl">
+    <div className="p-4 md:p-10">
+      <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
         Markdown Syntax Cheatsheet
-      </h1>
+      </h2>
       <p className="mb-8 text-sm text-gray-600 md:mb-10 md:text-base">
         Hover over a rule (or long-press on touch screens) to see the syntax
         example, or click the button to copy it instantly.

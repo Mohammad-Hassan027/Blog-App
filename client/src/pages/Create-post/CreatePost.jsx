@@ -167,11 +167,11 @@ function CreatePost() {
 
   return (
     <>
-      <main className="flex-1 py-6 shadow-2xl sm:py-10 md:py-18 rounded-2xl">
-        <div className="max-w-xl px-4 mx-auto">
+      <main className="flex-1 py-6 shadow-2xs sm:py-10 md:py-18 rounded-2xl">
+        <div className="max-w-xl px-4 md:px-8 mx-auto">
           <div className="space-y-6 md:space-y-8">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              <h1 className="text-2xl text-gray-900 font-bold tracking-tight sm:text-3xl">
                 Create a New Post
               </h1>
               <p className="mt-2 text-[#566879] dark:text-[#a0a9b4]">

@@ -191,7 +191,7 @@ async function updateBlog(req, res) {
   if (!checkAuth(req, res)) return;
 
   let tempFilePath = req.file ? req.file.path : null;
-  const { blogId } = req.params;
+  const blogId = req.params.id;
   if (!blogId || !isValidObjectId(blogId)) {
     return res.status(400).json({ error: "Invalid or missing blogId" });
   }
