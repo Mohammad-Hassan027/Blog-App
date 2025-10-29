@@ -59,7 +59,7 @@ function Footer() {
 
           {/* Quick Links */}
           <div className="md:col-span-1">
-            <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-gray-100">
+            <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-900 uppercase">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -112,7 +112,7 @@ function Footer() {
 
           {/* Categories */}
           <div className="md:col-span-1">
-            <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-gray-100">
+            <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-900 uppercase">
               Categories
             </h3>
             <ul className="space-y-3">
@@ -153,7 +153,7 @@ function Footer() {
 
           {/* Legal */}
           <div className="md:col-span-1">
-            <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-gray-100">
+            <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-900 uppercase">
               Legal
             </h3>
             <ul className="space-y-3">

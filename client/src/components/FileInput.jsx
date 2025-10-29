@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-const FileInput = () => {
+const FileInput = ({ onChange, disabled, isUploading }) => {
   return (
     <StyledWrapper>
       <div>
-        <label htmlFor="file" className="labelFile">
+        <label htmlFor="image-upload" className="labelFile">
           <span>
             <svg
               xmlSpace="preserve"
@@ -47,7 +47,14 @@ const FileInput = () => {
           </span>
           <p>drag and drop your file here or click to select a file!</p>
         </label>
-        <input className="input" name="text" id="file" type="file" />
+        <input
+          className="input"
+          accept="image/*"
+          id="image-upload"
+          type="file"
+          onChange={onChange}
+          disabled={disabled}
+        />
       </div>
     </StyledWrapper>
   );

@@ -7,6 +7,7 @@ import MarkdownRules from "../../components/MarkdownRules";
 import MarkdownEditor from "../../components/MarkdownEditor";
 import generateDescription from "../../utils/genDesc";
 import { isValidUrl } from "../../utils/ValidateData";
+import FileInput from "../../components/FileInput";
 
 const MAX_TAGS = 5;
 const MAX_IMAGE_SIZE_MB = 5;
@@ -265,7 +266,7 @@ function CreatePost() {
                   <label className="block mb-1 text-sm font-medium">
                     Post Image
                   </label>
-                  <div className="flex items-start gap-2">
+                  <div className="flex flex-col items-start gap-2">
                     <div className="flex-1">
                       <input
                         className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500 ${
@@ -278,6 +279,11 @@ function CreatePost() {
                         disabled={!!uploadedFile || isActionActive}
                       />
                     </div>
+                    {/* <FileInput
+                      onChange={handleFileUpload}
+                      disabled={isFileDisabled}
+                      isUploading={isUploading}
+                    /> */}
                     <div className="relative">
                       <input
                         type="file"
