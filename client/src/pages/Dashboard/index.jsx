@@ -104,7 +104,7 @@ function DashBoard() {
   const getTabClasses = (tabName) =>
     `${
       activeTab === tabName
-        ? "border-blue-500 text-blue-600"
+        ? "border-amber-500 text-orange-600"
         : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
     } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition duration-150 ease-in-out`;
 
@@ -178,7 +178,7 @@ function DashBoard() {
         <td className="px-6 py-4">
           <div className="flex items-center gap-4 text-sm font-medium">
             <Link
-              className="text-blue-500 cursor-pointer hover:text-blue-700 transition"
+              className="text-amber-500 cursor-pointer hover:text-amber-700 transition"
               to={`/post/${blog._id}`}
             >
               View
@@ -215,7 +215,7 @@ function DashBoard() {
                 size={18}
               />
               <input
-                className="w-full py-2 pl-10 pr-4 text-sm border rounded-lg border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500 transition duration-150"
+                className="w-full py-2 pl-10 pr-4 text-sm border rounded-lg border-gray-300 bg-white focus:border-amber-500 focus:ring-amber-500 transition duration-150"
                 placeholder="Search posts by title or author..."
                 type="text"
                 value={searchTerm}
@@ -224,7 +224,7 @@ function DashBoard() {
             </div>
             <div className="relative w-full sm:w-auto">
               <select
-                className="w-full py-2 pl-3 pr-8 text-sm border rounded-lg appearance-none border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500 transition duration-150"
+                className="w-full py-2 pl-3 pr-8 text-sm border rounded-lg appearance-none border-gray-300 bg-white focus:border-amber-500 focus:ring-amber-500 transition duration-150"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
               >

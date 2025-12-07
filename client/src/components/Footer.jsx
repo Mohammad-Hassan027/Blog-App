@@ -10,7 +10,7 @@ function Footer() {
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-3 mb-4">
               <svg
-                className="w-8 h-8 text-blue-500"
+                className="w-8 h-8 text-amber-500"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@ function Footer() {
                 href="https://github.com/Mohammad-Hassan027"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 transition-colors hover:text-blue-500"
+                className="text-gray-600 transition-colors hover:text-amber-500"
                 aria-label="GitHub"
               >
                 <FaGithub size={20} />
@@ -40,7 +40,7 @@ function Footer() {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 transition-colors hover:text-blue-500"
+                className="text-gray-600 transition-colors hover:text-amber-500"
                 aria-label="Twitter"
               >
                 <FaTwitter size={20} />
@@ -49,7 +49,7 @@ function Footer() {
                 href="https://www.linkedin.com/in/mohammad-hassan-shaikh-750791352?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 transition-colors hover:text-blue-500"
+                className="text-gray-600 transition-colors hover:text-amber-500"
                 aria-label="LinkedIn"
               >
                 <FaLinkedin size={20} />
@@ -66,7 +66,7 @@ function Footer() {
               <li>
                 <Link
                   to="/"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                   onClick={() => {
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
@@ -77,7 +77,7 @@ function Footer() {
               <li>
                 <Link
                   to="/about"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                   onClick={() => {
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
@@ -88,7 +88,7 @@ function Footer() {
               <li>
                 <Link
                   to="/contact"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                   onClick={() => {
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
@@ -99,7 +99,7 @@ function Footer() {
               <li>
                 <Link
                   to="/all-posts"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                   onClick={() => {
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
@@ -119,7 +119,7 @@ function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Technology
                 </Link>
@@ -127,7 +127,7 @@ function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Programming
                 </Link>
@@ -135,7 +135,7 @@ function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   AI & Machine Learning
                 </Link>
@@ -143,7 +143,7 @@ function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Web Development
                 </Link>
@@ -160,7 +160,7 @@ function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Privacy Policy
                 </Link>
@@ -168,7 +168,7 @@ function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Terms of Service
                 </Link>
@@ -176,7 +176,7 @@ function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Cookie Policy
                 </Link>
@@ -184,7 +184,7 @@ function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-500"
+                  className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   GDPR
                 </Link>

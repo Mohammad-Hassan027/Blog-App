@@ -43,7 +43,7 @@ function Header() {
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-3">
             <svg
-              className="w-6 h-6 text-blue-500"
+              className="w-6 h-6 text-amber-500"
               fill="none"
               viewBox="0 0 48 48"
               xmlns="http://www.w3.org/2000/svg"
@@ -57,24 +57,24 @@ function Header() {
 
         <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
           <nav className="items-center hidden gap-6 md:flex">
-            <Link className="text-sm font-medium hover:text-blue-500" to="/">
+            <Link className="text-sm font-medium hover:text-amber-500" to="/">
               Home
             </Link>
             <Link
-              className="text-sm font-medium hover:text-blue-500"
+              className="text-sm font-medium hover:text-amber-500"
               to="/about"
             >
               About
             </Link>
             <Link
-              className="text-sm font-medium hover:text-blue-500"
+              className="text-sm font-medium hover:text-amber-500"
               to="/contact"
             >
               Contact
             </Link>
             {user && (
               <Link
-                className="text-sm font-medium hover:text-blue-500"
+                className="text-sm font-medium hover:text-amber-500"
                 to="/dashboard"
               >
                 Dashboard
@@ -107,7 +107,7 @@ function Header() {
             <>
               <Link
                 to="/create"
-                className="hidden px-3 py-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm sm:inline-block sm:px-4 hover:bg-blue-500/90 hover:scale-105 active:scale-95"
+                className="hidden px-3 py-2 text-sm font-bold text-white bg-stone-500 rounded shadow-sm sm:inline-block sm:px-4 hover:bg-stone-500/90 hover:scale-105 active:scale-95"
               >
                 New Post
               </Link>
@@ -117,7 +117,7 @@ function Header() {
                   aria-haspopup="true"
                   aria-expanded={menuOpen}
                   onClick={() => setMenuOpen((s) => !s)}
-                  className="w-10 h-10 bg-center bg-cover rounded-full focus:ring-2 focus:ring-blue-300"
+                  className="w-10 h-10 bg-center bg-cover rounded-full focus:ring-2 focus:ring-orange-300"
                   style={{ backgroundImage: `url("${avatarUrl}")` }}
                 />
 
@@ -154,7 +154,7 @@ function Header() {
           ) : (
             <Link
               to="/login"
-              className="px-3 py-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm sm:px-4 hover:bg-blue-500/90 hover:scale-105 active:scale-95"
+              className="px-3 py-2 text-sm font-bold text-white bg-stone-500 rounded shadow-sm sm:px-4 hover:bg-stone-500/90 hover:scale-105 active:scale-95"
             >
               Sign In
             </Link>
@@ -168,21 +168,21 @@ function Header() {
           <nav className="flex flex-col gap-2">
             <Link
               to="/"
-              className="text-sm font-medium hover:text-blue-500"
+              className="text-sm font-medium hover:text-amber-500"
               onClick={() => setMobileOpen(false)}
             >
               Home
             </Link>
             <Link
               to="/about"
-              className="text-sm font-medium hover:text-blue-500"
+              className="text-sm font-medium hover:text-amber-500"
               onClick={() => setMobileOpen(false)}
             >
               About
             </Link>
             <Link
               to="/contact"
-              className="text-sm font-medium hover:text-blue-500"
+              className="text-sm font-medium hover:text-amber-500"
               onClick={() => setMobileOpen(false)}
             >
               Contact
@@ -190,7 +190,7 @@ function Header() {
             {user && (
               <Link
                 to="/dashboard"
-                className="text-sm font-medium hover:text-blue-500"
+                className="text-sm font-medium hover:text-amber-500"
                 onClick={() => setMobileOpen(false)}
               >
                 Dashboard
@@ -199,7 +199,7 @@ function Header() {
             {user ? (
               <Link
                 to="/create"
-                className="inline-block px-3 py-2 mt-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm hover:bg-blue-500/90 hover:scale-105 active:scale-95"
+                className="inline-block px-3 py-2 mt-2 text-sm font-bold text-white bg-stone-500 rounded shadow-sm hover:bg-stone-500/90 hover:scale-105 active:scale-95"
                 onClick={() => setMobileOpen(false)}
               >
                 New Post
@@ -207,7 +207,7 @@ function Header() {
             ) : (
               <Link
                 to="/login"
-                className="inline-block px-3 py-2 mt-2 text-sm font-bold text-white bg-blue-500 rounded shadow-sm hover:bg-blue-500/90"
+                className="inline-block px-3 py-2 mt-2 text-sm font-bold text-white bg-stone-500 rounded shadow-sm hover:bg-stone-500/90"
                 onClick={() => setMobileOpen(false)}
               >
                 Sign In

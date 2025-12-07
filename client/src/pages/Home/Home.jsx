@@ -16,7 +16,7 @@ function Home() {
               "url('https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&w=1600&q=60')",
           }}
         ></div>
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-black/30"></div>
         <div className="container relative px-4 mx-auto text-center text-white sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
             Explore the Future of Technology
@@ -27,7 +27,7 @@ function Home() {
           </p>
           <div className="mt-10">
             <Link
-              className="inline-block px-8 py-3 text-base font-medium text-white transition-transform transform bg-blue-500 rounded-lg hover:bg-blue-500/90 hover:scale-105 active:scale-95"
+              className="inline-block px-8 py-3 text-base font-medium text-white transition-transform transform bg-amber-500 rounded-lg hover:bg-amber-500/90 hover:scale-105 active:scale-95"
               to={"/all-posts"}
             >
               Browse All Posts
@@ -41,7 +41,7 @@ function Home() {
             Featured Post
           </h2>
           <div className="@container">
-            <div className="grid grid-cols-1 @[640px]:grid-cols-2 gap-8 items-center bg-blue-50/45 p-8 rounded-xl shadow-lg overflow-hidden">
+            <div className="grid grid-cols-1 @[640px]:grid-cols-2 gap-8 items-center bg-stone-50/45 p-8 rounded-xl shadow-lg overflow-hidden">
               <div className="order-2 @[640px]:order-1">
                 <h3 className="text-2xl font-bold text-gray-900">
                   The Rise of Quantum Computing
@@ -53,7 +53,7 @@ function Home() {
                 </p>
                 <div className="mt-6">
                   <Link
-                    className="inline-flex items-center gap-2 text-sm font-medium text-blue-500 hover:underline"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-amber-500 hover:underline"
                     to={"/post/68d62e54ce51c6eec9bc3608"}
                   >
                     Read More
@@ -94,7 +94,7 @@ function Home() {
               Latest Posts
             </h2>
             <Link
-              className="flex items-center gap-1 mt-2 text-sm font-medium text-blue-500 md:mt-0 hover:underline"
+              className="flex items-center gap-1 mt-2 text-sm font-medium text-amber-500 md:mt-0 hover:underline"
               to={"/all-posts"}
             >
               View all posts
@@ -119,7 +119,7 @@ function Home() {
             {isLoading ? (
               [...Array(6)].map((_, i) => (
                 <div
-                  className="flex flex-col p-8 transition-shadow duration-300 shadow-md bg-blue-50/45 rounded-xl animate-pulse h-full"
+                  className="flex flex-col p-8 transition-shadow duration-300 shadow-md bg-stone-50/45 rounded-xl animate-pulse h-full"
                   key={i}
                 >
                   <div className="w-1/4 h-4 bg-gray-200 rounded"></div>
@@ -132,7 +132,7 @@ function Home() {
                   <div className="mt-2 w-11/12 h-4 bg-gray-200 rounded"></div>
                   <div className="mt-2 w-5/6 h-4 bg-gray-200 rounded"></div>
 
-                  <div className="mt-4 w-1/5 h-3 bg-blue-200 rounded"></div>
+                  <div className="mt-4 w-1/5 h-3 bg-amber-100 rounded"></div>
                 </div>
               ))
             ) : error ? (

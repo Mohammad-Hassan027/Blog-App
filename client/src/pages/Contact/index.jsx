@@ -17,14 +17,14 @@ function ContactPage() {
           <div className="mt-12 space-y-6">
             <div className="flex items-start gap-4">
               <div className="shrink-0">
-                <span className="text-2xl text-blue-500 material-symbols-outlined">
+                <span className="text-2xl text-amber-500 material-symbols-outlined">
                   <CiMail />
                 </span>
               </div>
               <div>
                 <h3 className="font-semibold">Email</h3>
                 <a
-                  className="text-black/60 hover:text-blue-500"
+                  className="text-black/60 hover:text-amber-500"
                   href="mailto:support@techblog.com"
                 >
                   support@techblog.com
@@ -33,20 +33,20 @@ function ContactPage() {
             </div>
             <div className="flex items-start gap-4">
               <div className="shrink-0">
-                <span className="text-2xl text-blue-500 material-symbols-outlined">
+                <span className="text-2xl text-amber-500 material-symbols-outlined">
                   <MdOutlineGroup />
                 </span>
               </div>
               <div>
                 <h3 className="font-semibold">Social Media</h3>
                 <div className="flex items-center gap-4 mt-1">
-                  <a className="text-black/60 hover:text-blue-500" href="#">
+                  <a className="text-black/60 hover:text-amber-500" href="#">
                     Twitter
                   </a>
-                  <a className="text-black/60 hover:text-blue-500" href="#">
+                  <a className="text-black/60 hover:text-amber-500" href="#">
                     LinkedIn
                   </a>
-                  <a className="text-black/60 hover:text-blue-500" href="#">
+                  <a className="text-black/60 hover:text-amber-500" href="#">
                     Instagram
                   </a>
                 </div>
@@ -61,7 +61,7 @@ function ContactPage() {
                 Your Name
               </label>
               <input
-                className="w-full px-4 py-3 rounded-lg form-input bg-blue-50border-black/20 dark:border-white/20 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-lg form-input bg-stone-50border-black/20 dark:border-white/20 focus:border-amber-500 focus:ring-amber-500"
                 id="name"
                 name="name"
                 placeholder="Your Name"
@@ -73,7 +73,7 @@ function ContactPage() {
                 Your Email
               </label>
               <input
-                className="w-full px-4 py-3 rounded-lg form-input bg-blue-50border-black/20 dark:border-white/20 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-lg form-input bg-stone-50border-black/20 dark:border-white/20 focus:border-amber-500 focus:ring-amber-500"
                 id="email"
                 name="email"
                 placeholder="Your Email"
@@ -85,7 +85,7 @@ function ContactPage() {
                 Subject
               </label>
               <input
-                className="w-full px-4 py-3 rounded-lg form-input bg-blue-50border-black/20 dark:border-white/20 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-lg form-input bg-stone-50border-black/20 dark:border-white/20 focus:border-amber-500 focus:ring-amber-500"
                 id="subject"
                 name="subject"
                 placeholder="Subject"
@@ -97,7 +97,7 @@ function ContactPage() {
                 Your Message
               </label>
               <textarea
-                className="w-full px-4 py-3 rounded-lg form-input bg-blue-50border-black/20 dark:border-white/20 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-lg form-input bg-stone-50border-black/20 dark:border-white/20 focus:border-amber-500 focus:ring-amber-500"
                 id="message"
                 name="message"
                 placeholder="Your Message"
@@ -106,7 +106,7 @@ function ContactPage() {
             </div>
             <div>
               <button
-                className="w-full px-6 py-3 font-bold text-white transition-colors bg-blue-500 rounded-lg hover:bg-blue-500/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-background-light"
+                className="w-full px-6 py-3 font-bold text-white transition-colors bg-stone-500 rounded-lg hover:bg-stone-500/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 focus:ring-offset-background-light"
                 type="submit"
               >
                 Send Message

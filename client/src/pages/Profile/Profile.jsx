@@ -99,7 +99,7 @@ export default function Profile() {
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   disabled={isFormDisabled}
-                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm"
                 />
               </div>
             </div>
@@ -121,7 +121,7 @@ export default function Profile() {
                   onChange={(e) => setPhotoURL(e.target.value)}
                   placeholder="Paste image URL or use the upload button"
                   disabled={isFormDisabled}
-                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm"
                 />
 
                 <input
@@ -171,7 +171,7 @@ export default function Profile() {
               <button
                 type="submit"
                 disabled={isFormDisabled}
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out ${
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition duration-150 ease-in-out ${
                   isFormDisabled ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >

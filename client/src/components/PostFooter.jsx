@@ -27,7 +27,7 @@ function PostFooter() {
   }, []); // postData.isBookmarked
 
   const likeButtonClasses = postData.isLiked
-    ? "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20"
+    ? "bg-stone-500/10 text-amber-500 hover:bg-stone-500/20"
     : "bg-gray-100 text-gray-600 hover:bg-gray-200";
 
   const bookmarkButtonClasses = postData.isBookmarked

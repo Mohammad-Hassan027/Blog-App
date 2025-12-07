@@ -47,7 +47,7 @@ function AboutPage() {
                 <h4 className="text-3xl font-bold text-gray-900">
                   Sophia Bennett
                 </h4>
-                <p className="mb-4 text-xl font-medium text-blue-500">
+                <p className="mb-4 text-xl font-medium text-amber-500">
                   Lead Writer
                 </p>
                 <p className="text-lg text-gray-600">
@@ -72,7 +72,7 @@ function AboutPage() {
                 <h4 className="text-3xl font-bold text-gray-900">
                   Ethan Carter
                 </h4>
-                <p className="mb-4 text-xl font-medium text-blue-500">
+                <p className="mb-4 text-xl font-medium text-amber-500">
                   Contributing Editor
                 </p>
                 <p className="text-lg text-gray-600">

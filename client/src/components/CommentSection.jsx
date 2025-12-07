@@ -138,7 +138,7 @@ function CommentSection({ id, BlogAuthorUID }) {
           <textarea
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
-            className="w-full p-3 text-base text-gray-900 placeholder-gray-500 bg-white border-gray-300 rounded-lg shadow-sm resize-none form-textarea focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50"
+            className="w-full p-3 text-base text-gray-900 placeholder-gray-500 bg-white border-gray-300 rounded-lg shadow-sm resize-none form-textarea focus:border-amber-500 focus:ring-2 focus:ring-amber-500/50"
             placeholder="Add a comment..."
             rows="3"
           ></textarea>
@@ -161,7 +161,7 @@ function CommentSection({ id, BlogAuthorUID }) {
                   timerProgressBar: true,
                 });
               }}
-              className="items-center justify-center px-4 overflow-hidden text-sm font-semibold text-white transition-transform bg-blue-500 rounded-lg shadow-sm cursor-pointer h-9 hover:scale-105 active:scale-95"
+              className="items-center justify-center px-4 overflow-hidden text-sm font-semibold text-white transition-transform bg-stone-500 rounded-lg shadow-sm cursor-pointer h-9 hover:scale-105 active:scale-95"
             >
               Post Comment
             </button>

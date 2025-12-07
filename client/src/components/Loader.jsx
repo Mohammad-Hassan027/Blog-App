@@ -34,7 +34,7 @@ const StyledWrapper = styled.div`
     height: 20px;
     position: absolute;
     border-radius: 50%;
-    background-color: #3b82f6; /* Tailwind blue-500 color */
+    background-color: #f59e0b; /* Tailwind amber-500 color */
     left: 15%;
     transform-origin: 50%;
     animation: circle7124 0.6s alternate infinite cubic-bezier(0.4, 0, 0.2, 1);
@@ -75,11 +75,11 @@ const StyledWrapper = styled.div`
     height: 4px;
     border-radius: 50%;
     background-color: rgba(
-      59,
-      130,
-      246,
+      245,
+      158,
+      11,
       0.25
-    ); /* Tailwind blue-500 with opacity */
+    ); /* Tailwind amber-500 with opacity */
     position: absolute;
     top: 62px;
     transform-origin: 50%;

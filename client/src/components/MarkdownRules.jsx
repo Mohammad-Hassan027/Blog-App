@@ -51,7 +51,7 @@ const MarkdownRules = () => {
           <div key={index} className="relative">
             {/* The clickable button/pill */}
             <button
-              className="relative z-10 px-4 py-2 text-sm font-medium text-blue-700 transition-all duration-300 bg-white border border-blue-200 rounded-full shadow-md md:px-6 md:py-3 md:text-base hover:shadow-lg hover:bg-blue-50 active:bg-blue-100 focus:outline-none focus:ring-4 focus:ring-blue-300 whitespace-nowrap"
+              className="relative z-10 px-4 py-2 text-sm font-medium text-amber-700 transition-all duration-300 bg-white border border-amber-200 rounded-full shadow-md md:px-6 md:py-3 md:text-base hover:shadow-lg hover:bg-stone-50 active:bg-amber-100 focus:outline-none focus:ring-4 focus:ring-orange-300 whitespace-nowrap"
               onClick={() => handleRuleClick(syntax, index)}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
@@ -83,7 +83,7 @@ const MarkdownRules = () => {
                                 lg:left-full lg:ml-4 lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-0
                             "
               >
-                <span className="block mb-1 text-xs font-bold tracking-wider text-blue-300 uppercase">
+                <span className="block mb-1 text-xs font-bold tracking-wider text-orange-300 uppercase">
                   Syntax Example:
                 </span>
                 {/* Use pre-wrap to handle the multi-line syntax correctly */}

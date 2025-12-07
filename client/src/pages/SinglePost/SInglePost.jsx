@@ -72,7 +72,7 @@ function SinglePost() {
           <header>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Link
-                className="hover:text-blue-500 dark:hover:text-blue-500"
+                className="hover:text-amber-500 dark:hover:text-amber-500"
                 to={"/all-posts"}
               >
                 Browse All Posts

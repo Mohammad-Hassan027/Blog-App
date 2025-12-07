@@ -48,7 +48,7 @@ function AllPostsPage() {
               </span>
             </span>
             <input
-              className="w-full py-3 pl-10 pr-4 text-lg transition-colors rounded-full bg-blue-50/45 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+              className="w-full py-3 pl-10 pr-4 text-lg transition-colors rounded-full bg-stone-50/45 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
               placeholder="Search posts..."
               type="search"
               value={searchTerm}
@@ -59,7 +59,7 @@ function AllPostsPage() {
         <div className="flex flex-col items-center justify-end mb-8 space-y-4 md:flex-row md:space-y-0 md:space-x-2">
           {/* Category Dropdown */}
           <div className="relative">
-            <select className="py-2 pl-3 pr-8 text-sm font-medium rounded-md appearance-none text-slate-600 bg-blue-50/50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <select className="py-2 pl-3 pr-8 text-sm font-medium rounded-md appearance-none text-slate-600 bg-stone-50/50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
               <option>Category</option>
               <option>Lifestyle</option>
               <option>Technology</option>
@@ -74,7 +74,7 @@ function AllPostsPage() {
           </div>
           {/* Tag Dropdown */}
           <div className="relative">
-            <select className="py-2 pl-3 pr-8 text-sm font-medium rounded-md appearance-none text-slate-600 bg-blue-50/50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <select className="py-2 pl-3 pr-8 text-sm font-medium rounded-md appearance-none text-slate-600 bg-stone-50/50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
               <option>Tag</option>
               <option>Sustainable</option>
               <option>Photography</option>
@@ -92,7 +92,7 @@ function AllPostsPage() {
 
         {isLoading ? (
           <div className="flex justify-center py-10">
-            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent border-solid rounded-full animate-spin" />
           </div>
         ) : displayError ? (
           <p className="text-center text-red-500">
@@ -139,7 +139,7 @@ function AllPostsPage() {
                         key={pageNumber}
                         className={`inline-flex items-center justify-center w-10 h-10 font-medium rounded-full transition-colors ${
                           pageNumber === currentPage
-                            ? "text-white bg-blue-500"
+                            ? "text-white bg-stone-500"
                             : "text-slate-600 hover:bg-slate-200"
                         }`}
                         onClick={() => handlePageChange(pageNumber)}

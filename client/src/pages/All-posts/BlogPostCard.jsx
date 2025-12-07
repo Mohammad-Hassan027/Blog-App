@@ -28,7 +28,7 @@ function BlogPostCard({ blog }) {
         </div>
         <div className="md:col-span-3">
           <div className="flex items-center mb-2 space-x-2">
-            <span className="inline-block bg-blue-500/10 text-blue-500 text-xs font-medium px-2.5 py-0.5 rounded-full">
+            <span className="inline-block bg-stone-500/10 text-amber-500 text-xs font-medium px-2.5 py-0.5 rounded-full">
               {tag[0] || "Lifestyle"}
             </span>
             <span className="inline-block bg-slate-200 text-slate-600 text-xs font-medium px-2.5 py-0.5 rounded-full">
@@ -37,7 +37,7 @@ function BlogPostCard({ blog }) {
           </div>
           <h3 className="text-2xl font-bold text-slate-900">
             <Link
-              className="transition-colors hover:text-blue-500"
+              className="transition-colors hover:text-amber-500"
               to={`/post/${postId}`}
             >
               {title || "The Future of Sustainable Living"}
@@ -52,7 +52,7 @@ function BlogPostCard({ blog }) {
               {createdAt ? new Date(createdAt).toLocaleDateString() : ""}
             </div>
             <Link
-              className="inline-flex items-center text-sm font-medium text-blue-500 transition-colors hover:text-blue-500/80"
+              className="inline-flex items-center text-sm font-medium text-amber-500 transition-colors hover:text-amber-500/80"
               to={`/post/${postId}`}
             >
               View Post

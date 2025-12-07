@@ -4,7 +4,7 @@ function BlogCard({ blog }) {
   const { title, description, createdAt } = blog;
   const postId = blog._id;
   return (
-    <div className="flex flex-col p-6 transition-shadow duration-300 shadow-md bg-blue-50/45 rounded-xl hover:shadow-xl h-full">
+    <div className="flex flex-col p-6 transition-shadow duration-300 bg-white border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 rounded-xl h-full">
       <span className="text-sm text-gray-500">
         {new Date(createdAt).toLocaleDateString()}
       </span>
@@ -18,7 +18,7 @@ function BlogCard({ blog }) {
       </p>
 
       <Link
-        className="inline-flex items-center gap-2 mt-4 text-sm font-medium text-blue-500 hover:underline"
+        className="inline-flex items-center gap-2 mt-4 text-sm font-medium text-amber-500 hover:underline"
         to={`/post/${postId}`}
         onClick={() => {
           window.scrollTo(0, 0);

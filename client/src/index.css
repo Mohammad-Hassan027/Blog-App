@@ -1,7 +1,19 @@
 /* @import url("@tailwindcss/typography"); */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 /* @plugin "tailwindcss/typography"; */
+
+::selection {
+  background-color: #fed7aa; /* amber-200 */
+  color: #92400e; /* amber-900 */
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background-color: #fafaf9; /* stone-50 */
+  color: #292524; /* stone-800 */
+}
 
 .markdown-container h1 {
   font-size: xx-large;

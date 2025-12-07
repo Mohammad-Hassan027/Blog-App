@@ -242,7 +242,7 @@ function EditPost() {
                 <div className="flex flex-wrap items-center gap-2">
                   <select
                     id="tags"
-                    className={`form-select rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500 ${
+                    className={`form-select rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-amber-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-amber-500 ${
                       isActionActive ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     value=""
@@ -268,12 +268,12 @@ function EditPost() {
                     {tags.map((tag) => (
                       <span
                         key={tag}
-                        className="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded"
+                        className="inline-flex items-center px-2 py-1 text-xs font-medium text-amber-700 bg-amber-100 rounded"
                       >
                         {tag}
                         <button
                           type="button"
-                          className={`ml-1 text-blue-500 hover:text-blue-700 focus:outline-none ${
+                          className={`ml-1 text-amber-500 hover:text-amber-700 focus:outline-none ${
                             isActionActive
                               ? "opacity-50 cursor-not-allowed"
                               : ""
@@ -297,7 +297,7 @@ function EditPost() {
                     Title
                   </label>
                   <input
-                    className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500 ${
+                    className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-amber-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-amber-500 ${
                       isActionActive ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     id="title"
@@ -317,7 +317,7 @@ function EditPost() {
                   <div className="flex items-start gap-2">
                     <div className="flex-1">
                       <input
-                        className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-blue-500 ${
+                        className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-amber-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-amber-500 ${
                           isActionActive ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                         type="url"
@@ -406,7 +406,7 @@ function EditPost() {
                   type="button"
                   onClick={(e) => handleSubmit(e, "published")}
                   disabled={isActionActive}
-                  className={`w-full sm:w-auto rounded bg-blue-500 px-6 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-blue-500/90 ${
+                  className={`w-full sm:w-auto rounded bg-stone-500 px-6 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-stone-500/90 ${
                     isActionActive ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
