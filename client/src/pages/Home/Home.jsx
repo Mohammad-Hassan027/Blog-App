@@ -27,7 +27,7 @@ function Home() {
           </p>
           <div className="mt-10">
             <Link
-              className="inline-block px-8 py-3 text-base font-medium text-white transition-transform transform bg-amber-500 rounded-lg hover:bg-amber-500/90 hover:scale-105 active:scale-95"
+              className="inline-block px-8 py-3 text-base font-medium text-white transition-transform transform bg-amber-600 rounded-lg hover:bg-amber-600/90 hover:scale-105 active:scale-95"
               to={"/all-posts"}
             >
               Browse All Posts

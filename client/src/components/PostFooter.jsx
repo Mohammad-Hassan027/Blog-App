@@ -27,11 +27,11 @@ function PostFooter() {
   }, []); // postData.isBookmarked
 
   const likeButtonClasses = postData.isLiked
-    ? "bg-stone-500/10 text-amber-500 hover:bg-stone-500/20"
+    ? "bg-stone-500/10 text-amber-700 hover:bg-stone-500/20"
     : "bg-gray-100 text-gray-600 hover:bg-gray-200";
 
   const bookmarkButtonClasses = postData.isBookmarked
-    ? "bg-amber-500/10 text-amber-500 hover:bg-amber-500/20"
+    ? "bg-amber-500/10 text-amber-700 hover:bg-amber-500/20"
     : "bg-gray-100 text-gray-600 hover:bg-gray-200";
 
   return (
@@ -39,9 +39,14 @@ function PostFooter() {
       <button
         onClick={handleLike}
         className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition duration-150 ${likeButtonClasses}`}
-        aria-label={postData.isLiked ? "Unlike post" : "Like post"}
+        aria-label={
+          postData.isLiked
+            ? `Unlike post, ${postData.likes} likes`
+            : `Like post, ${postData.likes} likes`
+        }
       >
         <svg
+          aria-hidden="true"
           fill="currentColor"
           height="18"
           viewBox="0 0 256 256"
@@ -55,9 +60,14 @@ function PostFooter() {
       <button
         onClick={handleBookmark}
         className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition duration-150 ${bookmarkButtonClasses}`}
-        aria-label={postData.isBookmarked ? "Remove bookmark" : "Bookmark post"}
+        aria-label={
+          postData.isBookmarked
+            ? `Remove bookmark, ${postData.bookmarks} bookmarks`
+            : `Bookmark post, ${postData.bookmarks} bookmarks`
+        }
       >
         <svg
+          aria-hidden="true"
           fill="currentColor"
           height="18"
           viewBox="0 0 256 256"

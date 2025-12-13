@@ -16,7 +16,7 @@ function BlogPostCard({ blog }) {
             <picture className="">
               <img
                 loading="lazy"
-                alt="Post image"
+                alt={title || "Blog post thumbnail"}
                 className="object-cover transition-transform duration-300 transform group-hover:scale-105"
                 src={
                   imageUrl ||
@@ -27,11 +27,11 @@ function BlogPostCard({ blog }) {
           </Link>
         </div>
         <div className="md:col-span-3">
-          <div className="flex items-center mb-2 space-x-2">
-            <span className="inline-block bg-stone-500/10 text-amber-500 text-xs font-medium px-2.5 py-0.5 rounded-full">
+          <div className="flex items-center mb-2 space-x-2  text-xs font-medium [&>span]:px-2.5 [&>span]:py-[0.2rem] [&>span]:rounded-full">
+            <span className="inline-block bg-stone-500/10 text-amber-700">
               {tag[0] || "Lifestyle"}
             </span>
-            <span className="inline-block bg-slate-200 text-slate-600 text-xs font-medium px-2.5 py-0.5 rounded-full">
+            <span className="inline-block bg-slate-200 text-slate-700">
               {tag[1] || "Sustainable"}
             </span>
           </div>
@@ -56,7 +56,10 @@ function BlogPostCard({ blog }) {
               to={`/post/${postId}`}
             >
               View Post
-              <span className="ml-1 text-base material-symbols-outlined">
+              <span
+                className="ml-1 text-base material-symbols-outlined"
+                aria-hidden="true"
+              >
                 <IoIosArrowRoundForward />
               </span>
             </Link>

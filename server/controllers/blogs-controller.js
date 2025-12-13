@@ -1,15 +1,13 @@
 const Blog = require("../models/Blog");
 const Comment = require("../models/Comment");
 const { cloudinary, uploadImage } = require("../utils/cloudinary");
-const fs = require("fs").promises;
-const os = require("os");
-const path = require("path");
 const {
   isValidObjectId,
   getRequestingUserUID,
+  cleanupTempFile,
+  normalizeDate,
+  normalizeTags,
 } = require("../utils/controllerUtils");
-
-const TEMP_UPLOAD_ROOT = path.join(os.tmpdir(), "blog-app-uploads");
 
 function checkAuth(req, res) {
   if (!req.user || !req.user.uid) {
@@ -19,53 +17,10 @@ function checkAuth(req, res) {
   return true;
 }
 
-async function cleanupTempFile(tempFilePath) {
-  if (!tempFilePath) return;
-
-  try {
-    const resolvedTempPath = path.resolve(tempFilePath);
-    if (resolvedTempPath.startsWith(TEMP_UPLOAD_ROOT)) {
-      await fs.unlink(resolvedTempPath);
-    } else {
-      console.warn(
-        `Refusing to delete file outside temp upload dir: ${resolvedTempPath}`
-      );
-    }
-  } catch (cleanupErr) {
-    // Ignore ENOENT (file not found) errors, which can happen if it was already deleted
-    if (cleanupErr.code !== "ENOENT") {
-      console.error("Failed to delete temp file:", cleanupErr);
-    }
-  }
-}
-
-function normalizeTags(tagInput) {
-  if (Array.isArray(tagInput)) return tagInput.filter(Boolean);
-
-  if (typeof tagInput === "string" && tagInput.trim() !== "") {
-    return tagInput
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
-  }
-
-  return undefined;
-}
-
-function normalizeDate(dateInput) {
-  if (!dateInput) return undefined;
-  const c = dateInput;
-  // If it can be parsed as a number, treat it as a timestamp
-  if (!isNaN(Number(c))) return new Date(Number(c));
-  // Otherwise, treat it as a date string
-  const date = new Date(c);
-  return isNaN(date.getTime()) ? undefined : date;
-}
-
 async function getBlogs(req, res) {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 10));
     const skip = (page - 1) * limit;
     const filter = { status: "published" };
 
@@ -233,22 +188,28 @@ async function updateBlog(req, res) {
 
     const updateFields = {};
 
-    if (req.body.title !== undefined) updateFields.title = req.body.title;
-    if (req.body.description !== undefined)
-      updateFields.description = req.body.description;
-    if (req.body.content !== undefined) updateFields.content = req.body.content;
+    const textFields = ["title", "description", "content", "status"];
 
-    updateFields.imageUrl = imageUrl;
-    updateFields.imagePublicId = imagePublicId;
-    updateFields.status = req.body.status || blog.status;
-
-    // Only include tags/createdAt if they were provided in the request
-    if (tagsUpdate !== undefined) updateFields.tag = tagsUpdate;
-    if (createdAtUpdate !== undefined) updateFields.createdAt = createdAtUpdate;
-
-    const updatedBlog = await Blog.findByIdAndUpdate(blogId, updateFields, {
-      new: true,
+    textFields.forEach((field) => {
+      if (typeof req.body[field] === "string") {
+        updateFields[field] = req.body[field];
+      }
     });
+
+    if (typeof imageUrl === "string") updateFields.imageUrl = imageUrl;
+    if (typeof imagePublicId === "string")
+      updateFields.imagePublicId = imagePublicId;
+
+    if (tagsUpdate !== undefined) updateFields.tag = tagsUpdate;
+
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      blogId,
+      { $set: updateFields },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     res.json(updatedBlog);
   } catch (err) {
