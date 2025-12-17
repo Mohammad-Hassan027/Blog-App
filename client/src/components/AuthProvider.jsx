@@ -54,9 +54,9 @@ export function AuthRoute({ children }) {
 export function ConditionalPrivateRoute({ children }) {
   const { user, loading } = useAuthStore();
   const {
-    currentBlog,
-    currentBlogComments,
-    loading: blogLoading,
+    // currentBlog,
+    // currentBlogComments,
+    // loading: blogLoading,
     error,
   } = useBlogStore();
 

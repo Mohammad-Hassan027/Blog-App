@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react"; //
 import { useRoutes } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -6,22 +7,25 @@ import {
   AuthRoute,
 } from "./components/AuthProvider";
 import Layout from "./components/Layout";
-import Home from "./pages/Home/Home";
-import CreatePost from "./pages/Create-post/CreatePost";
-import SinglePost from "./pages/SinglePost/SInglePost";
-import AllPostsPage from "./pages/All-posts";
-import AboutPage from "./pages/About-us/index";
-import ContactPage from "./pages/Contact";
-import Login from "./pages/Auth/Login";
-import Register from "./pages/Auth/Register";
-import DashBoard from "./pages/Dashboard";
-import EditPost from "./pages/Edit-post/EditPost";
-import Profile from "./pages/Profile/Profile";
+import Loader from "./components/Loader"; // Ensure you import your Loader component
+
+// 1. Replace static imports with lazy imports
+const Home = lazy(() => import("./pages/Home/Home"));
+const CreatePost = lazy(() => import("./pages/Create-post/CreatePost"));
+const SinglePost = lazy(() => import("./pages/SinglePost/SInglePost"));
+const AllPostsPage = lazy(() => import("./pages/All-posts"));
+const AboutPage = lazy(() => import("./pages/About-us/index"));
+const ContactPage = lazy(() => import("./pages/Contact"));
+const Login = lazy(() => import("./pages/Auth/Login"));
+const Register = lazy(() => import("./pages/Auth/Register"));
+const DashBoard = lazy(() => import("./pages/Dashboard"));
+const EditPost = lazy(() => import("./pages/Edit-post/EditPost"));
+const Profile = lazy(() => import("./pages/Profile/Profile"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: 1000 * 60 * 5,
     },
   },
 });
@@ -38,9 +42,7 @@ function Routes() {
         },
         {
           path: "/post/:id",
-          element: (
-            <SinglePost />
-          ),
+          element: <SinglePost />,
         },
         {
           path: "create",
@@ -112,7 +114,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Routes />
+        <Suspense
+          fallback={
+            <div className="flex h-screen items-center justify-center">
+              <Loader />
+            </div>
+          }
+        >
+          <Routes />
+        </Suspense>
       </AuthProvider>
     </QueryClientProvider>
   );

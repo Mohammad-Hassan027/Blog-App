@@ -8,6 +8,7 @@ const isValidUrl = (url) => {
       u.protocol === "data:"
     );
   } catch (e) {
+    console.log(e);
     // If new URL(url) throws an error, it's not a valid URL
     return false;
   }

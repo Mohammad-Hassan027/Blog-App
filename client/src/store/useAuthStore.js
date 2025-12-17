@@ -3,9 +3,9 @@ import { auth } from "../firebase/config";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendSignInLinkToEmail,
-  isSignInWithEmailLink,
-  signInWithEmailLink,
+  // sendSignInLinkToEmail,
+  // isSignInWithEmailLink,
+  // signInWithEmailLink,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   GoogleAuthProvider,

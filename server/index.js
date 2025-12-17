@@ -5,20 +5,21 @@ const mongoose = require("mongoose");
 
 const blogsRouter = require("./routes/blogs");
 const commentsRouter = require("./routes/comments");
+const uploadsRouter = require("./routes/uploads");
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+const origins = process.env.FRONTEND_ORIGIN.split(",");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors({ origin: process.env.FRONTEND_ORIGIN || "http://localhost:5173" })
-);
+app.use(cors({ origin: origins }));
 
 // routes
 app.use("/api/blogs", blogsRouter);
 app.use("/api/comments", commentsRouter);
+app.use("/api/uploads", uploadsRouter);
 
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 

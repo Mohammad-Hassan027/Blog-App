@@ -1,13 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
 import { useCreatePost } from "../../hooks/blogHooks";
 import { getImageDataUrl } from "../../utils/image";
-import MarkdownRules from "../../components/MarkdownRules";
-import MarkdownEditor from "../../components/MarkdownEditor";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} from "../../utils/cloudinary";
+import Toast from "../../components/Toast";
+// import MarkdownRules from "../../components/MarkdownRules";
+// import MarkdownEditor from "../../components/MarkdownEditor";
 import generateDescription from "../../utils/genDesc";
 import { isValidUrl } from "../../utils/ValidateData";
-import FileInput from "../../components/FileInput";
+// import FileInput from "../../components/FileInput";
+// import Tiptap from "../../components/ui/Tiptap";
+import MarkdownEditor from "../../components/Tiptap";
 
 const MAX_TAGS = 5;
 const MAX_IMAGE_SIZE_MB = 5;
@@ -24,8 +31,9 @@ function CreatePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [uploadedFile, setUploadedFile] = useState(null); // File object
-  const [isUploading, setIsUploading] = useState(false); // Only tracks local file processing
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [imagePublicId, setImagePublicId] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const [formError, setFormError] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [tags, setTags] = useState([]);
@@ -49,10 +57,45 @@ function CreatePost() {
   const availableTagOptions = tagOptions.filter((tag) => !tags.includes(tag));
 
   const clearImageStates = () => {
-    setImageUrl("");
-    setUploadedFile(null);
-    setImagePreview("");
+    (async () => {
+      if (imagePublicId) {
+        try {
+          await deleteFromCloudinary(imagePublicId);
+          setToastMessage("Image removed");
+          setShowToast(true);
+        } catch (err) {
+          console.error("Failed to delete temp image on remove:", err);
+        }
+      }
+      setImageUrl("");
+      setUploadedFile(null);
+      setImagePreview("");
+      setImagePublicId("");
+    })();
   };
+
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState("success");
+
+  useEffect(() => {
+    if (error) {
+      const msg = error?.message || String(error);
+      setToastMessage(msg);
+      setToastType("error");
+      setShowToast(true);
+    } else if (formError) {
+      setToastMessage(formError);
+      setToastType("error");
+      setShowToast(true);
+    }
+  }, [error, formError]);
+
+  useEffect(() => {
+    if (!showToast) return;
+    const t = setTimeout(() => setShowToast(false), 3000);
+    return () => clearTimeout(t);
+  }, [showToast]);
 
   const handleImageUrlChange = (e) => {
     const url = e.target.value;
@@ -83,6 +126,7 @@ function CreatePost() {
       const preview = await getImageDataUrl(file);
       setImagePreview(preview);
       setUploadedFile(file);
+      setImagePublicId("");
     } catch (err) {
       console.error(err);
       setFormError("Failed to preview image. Please try again.");
@@ -142,25 +186,43 @@ function CreatePost() {
         tag: tags,
         status: status,
       };
+      let uploadedPublicId = null;
+      try {
+        if (uploadedFile) {
+          setIsUploading(true);
+          const result = await uploadToCloudinary(uploadedFile);
+          const secure = result?.secure_url || result?.url || null;
+          const publicId = result?.public_id || null;
+          postData.imageUrl = secure;
+          postData.imagePublicId = publicId;
+          setImagePublicId(publicId);
+          uploadedPublicId = publicId;
+          setToastMessage("Image uploaded");
+          setToastType("success");
+          setShowToast(true);
+        } else if (imageUrl) {
+          postData.imageUrl = imageUrl;
+        }
 
-      let formData = null;
-
-      if (uploadedFile) {
-        formData = new FormData();
-        formData.append("image", uploadedFile);
-        Object.entries(postData).forEach(([key, value]) => {
-          if (Array.isArray(value)) {
-            value.forEach((item) => formData.append(key, item));
-          } else {
-            formData.append(key, value);
+        await createPost(postData);
+        navigate("/");
+      } catch (err) {
+        if (!uploadedPublicId) {
+          setToastMessage("Image upload failed");
+          setToastType("error");
+          setShowToast(true);
+        }
+        if (uploadedPublicId) {
+          try {
+            await deleteFromCloudinary(uploadedPublicId);
+          } catch (delErr) {
+            console.error("Failed to delete orphan image:", delErr);
           }
-        });
-      } else if (imageUrl) {
-        postData.imageUrl = imageUrl;
+        }
+        throw err;
+      } finally {
+        setIsUploading(false);
       }
-
-      await createPost(formData || postData);
-      navigate("/");
     } catch (err) {
       setFormError(err.message || "Failed to create post");
     }
@@ -179,11 +241,6 @@ function CreatePost() {
                 Fill out the form below to publish a new article on your blog.
               </p>
             </div>
-            {(error || formError) && (
-              <div className="p-3 text-sm text-red-500 bg-red-100 rounded">
-                {error || formError}
-              </div>
-            )}
             <form
               className="space-y-4 sm:space-y-6"
               onSubmit={(e) => handleSubmit(e, "published")}
@@ -249,7 +306,7 @@ function CreatePost() {
                     Title
                   </label>
                   <input
-                    className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-amber-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-amber-500 ${
+                    className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:outline-none focus:ring-inset focus:ring-amber-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-amber-500 ${
                       isActionActive ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     id="title"
@@ -266,10 +323,10 @@ function CreatePost() {
                   <label className="block mb-1 text-sm font-medium">
                     Post Image
                   </label>
-                  <div className="flex flex-col items-start gap-2">
+                  <div className="flex items-start gap-2">
                     <div className="flex-1">
                       <input
-                        className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus:ring-2 focus:ring-inset focus:ring-amber-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-amber-500 ${
+                        className={`form-input w-full rounded border-0 bg-[#e3e8ed]/50 p-3 text-sm placeholder:text-[#566879]/70 ring-1 ring-inset ring-[#1c2834]/10 focus-within:ring-2 focus:outline-none focus-within:ring-orange-500/20 focus-within:border-orange-500 dark:bg-[#e3e8ed]/5 dark:ring-white/10 dark:focus:ring-amber-500 ${
                           isActionActive ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                         type="url"
@@ -295,13 +352,39 @@ function CreatePost() {
                       />
                       <label
                         htmlFor="image-upload"
-                        className={`inline-flex items-center px-4 py-3 rounded bg-gray-100 hover:bg-gray-200 text-sm font-medium ${
+                        className={`inline-flex items-center px-4 py-3 rounded bg-gray-100 text-sm font-medium ${
                           isFileDisabled
                             ? "opacity-50 cursor-not-allowed"
                             : "cursor-pointer hover:bg-gray-200"
                         }`}
                       >
-                        {isUploading ? "Processing..." : "Upload"}
+                        {isUploading ? (
+                          <span className="inline-flex items-center gap-2">
+                            <svg
+                              className="animate-spin h-4 w-4 text-amber-600"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                              ></path>
+                            </svg>
+                            Uploading...
+                          </span>
+                        ) : (
+                          "Upload"
+                        )}
                       </label>
                     </div>
                   </div>
@@ -339,6 +422,12 @@ function CreatePost() {
                     </button>
                   </div>
                 )}
+                <Toast
+                  message={toastMessage}
+                  show={showToast}
+                  onClose={() => setShowToast(false)}
+                  type={toastType}
+                />
               </div>
               <MarkdownEditor
                 value={content}
@@ -369,7 +458,7 @@ function CreatePost() {
               </div>
             </form>
           </div>
-          <MarkdownRules />
+          {/* <MarkdownRules /> */}
         </div>
       </main>
     </>

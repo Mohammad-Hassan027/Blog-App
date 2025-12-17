@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
-const FileInput = ({ onChange, disabled, isUploading }) => {
+const FileInput = ({ onChange, disabled }) => {
+  // isUploading prop
   return (
     <StyledWrapper>
       <div>

@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useAuthStore from "../../store/useAuthStore";
-import { uploadToCloudinary } from "../../utils/cloudinary";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} from "../../utils/cloudinary";
+import Toast from "../../components/Toast";
 import { isValidUrl } from "../../utils/ValidateData";
 
 export default function Profile() {
   const { user, updateProfile, loading, error } = useAuthStore();
   const [displayName, setDisplayName] = useState(user?.displayName ?? "");
   const [photoURL, setPhotoURL] = useState(user?.photoURL ?? "");
+  const [newUploadedPublicId, setNewUploadedPublicId] = useState(null);
+  const [savedOnSubmit, setSavedOnSubmit] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState("success");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +34,7 @@ export default function Profile() {
 
     try {
       await updateProfile({ displayName, photoURL });
+      setSavedOnSubmit(true);
       setSuccessMessage("Profile updated successfully! 🎉");
       setTimeout(() => setSuccessMessage(""), 5000);
     } catch (err) {
@@ -39,10 +49,30 @@ export default function Profile() {
       setFormError("");
       setSuccessMessage("");
       try {
-        const url = await uploadToCloudinary(file);
-        setPhotoURL(url);
+        // If there's a previously uploaded-but-unsaved image, delete it first
+        if (newUploadedPublicId) {
+          try {
+            await deleteFromCloudinary(newUploadedPublicId);
+          } catch (ign) {
+            console.warn("Failed to delete previous temp upload:", ign);
+          }
+          setNewUploadedPublicId(null);
+        }
+
+        const result = await uploadToCloudinary(file);
+        const secure = result?.secure_url || result?.url || null;
+        const publicId = result?.public_id || null;
+        setPhotoURL(secure);
+        setNewUploadedPublicId(publicId);
+        setToastMessage("Image uploaded");
+        setToastType("success");
+        setShowToast(true);
       } catch (err) {
+        console.log(err);
         setFormError("Failed to upload image. Please try again.");
+        setToastMessage("Image upload failed");
+        setToastType("error");
+        setShowToast(true);
       } finally {
         setIsUploading(false);
         e.target.value = null;
@@ -51,6 +81,50 @@ export default function Profile() {
   };
 
   const isFormDisabled = loading || isUploading;
+
+  // Cleanup: if user uploaded a new profile image but never saved, delete it on unmount
+  useEffect(() => {
+    return () => {
+      if (newUploadedPublicId && !savedOnSubmit) {
+        // best-effort cleanup
+        deleteFromCloudinary(newUploadedPublicId).catch((err) =>
+          console.warn("Cleanup failed for temp profile image:", err)
+        );
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // If the photoURL is cleared (e.g. user clicked Remove Image or emptied the input),
+  // delete any newly uploaded-but-unsaved image to avoid leaving orphans in Cloudinary.
+  useEffect(() => {
+    if (!photoURL && newUploadedPublicId && !savedOnSubmit) {
+      // best-effort delete
+      deleteFromCloudinary(newUploadedPublicId).catch((err) =>
+        console.warn("Failed to delete temp profile image on clear:", err)
+      );
+      setNewUploadedPublicId(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [photoURL]);
+
+  // show form-level errors/success as toasts for consistent UX
+  useEffect(() => {
+    if (error) {
+      const msg = error?.message || String(error);
+      setToastMessage(msg);
+      setToastType("error");
+      setShowToast(true);
+    } else if (formError) {
+      setToastMessage(formError);
+      setToastType("error");
+      setShowToast(true);
+    } else if (successMessage) {
+      setToastMessage(successMessage);
+      setToastType("success");
+      setShowToast(true);
+    }
+  }, [error, formError, successMessage]);
 
   return (
     <div className="flex flex-col justify-center min-h-screen py-12 sm:px-6 lg:px-8">
@@ -63,24 +137,7 @@ export default function Profile() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {(error || formError || successMessage) && (
-              <div
-                className={`p-4 border-l-4 ${
-                  error || formError
-                    ? "border-red-400 bg-red-50"
-                    : "border-green-400 bg-green-50"
-                }`}
-              >
-                <p
-                  className={`text-sm ${
-                    error || formError ? "text-red-700" : "text-green-700"
-                  }`}
-                  role="alert"
-                >
-                  {error || formError || successMessage}
-                </p>
-              </div>
-            )}
+            {/* show messages via toast instead of inline alert */}
 
             <div>
               <label
@@ -140,11 +197,35 @@ export default function Profile() {
                       : "hover:bg-gray-200"
                   }`}
                 >
-                  {isUploading
-                    ? "Uploading..."
-                    : photoURL
-                    ? "Change"
-                    : "Upload"}
+                  {isUploading ? (
+                    <span className="inline-flex items-center gap-2">
+                      <svg
+                        className="animate-spin h-4 w-4 text-amber-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                        ></path>
+                      </svg>
+                      Uploading...
+                    </span>
+                  ) : photoURL ? (
+                    "Change"
+                  ) : (
+                    "Upload"
+                  )}
                 </label>
               </div>
 
@@ -157,7 +238,24 @@ export default function Profile() {
                   />
                   <button
                     type="button"
-                    onClick={() => setPhotoURL("")}
+                    onClick={async () => {
+                      if (isFormDisabled) return;
+                      // If this image was just uploaded and not saved, delete it from Cloudinary
+                      if (newUploadedPublicId) {
+                        try {
+                          await deleteFromCloudinary(newUploadedPublicId);
+                          setToastMessage("Image removed");
+                          setShowToast(true);
+                        } catch (delErr) {
+                          console.error(
+                            "Failed to delete temp profile image:",
+                            delErr
+                          );
+                        }
+                        setNewUploadedPublicId(null);
+                      }
+                      setPhotoURL("");
+                    }}
                     className="text-sm text-red-600 hover:text-red-900 font-medium disabled:opacity-50"
                     disabled={isFormDisabled}
                   >
@@ -165,6 +263,12 @@ export default function Profile() {
                   </button>
                 </div>
               )}
+              <Toast
+                message={toastMessage}
+                show={showToast}
+                onClose={() => setShowToast(false)}
+                type={toastType}
+              />
             </div>
 
             <div>

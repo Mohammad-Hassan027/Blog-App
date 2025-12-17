@@ -2,11 +2,16 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
 import { usePost, useUpdatePost } from "../../hooks/blogHooks";
-import { uploadToCloudinary } from "../../utils/cloudinary";
-import MarkdownRules from "../../components/MarkdownRules";
-import MarkdownEditor from "../../components/MarkdownEditor";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} from "../../utils/cloudinary";
+import Toast from "../../components/Toast";
+// import MarkdownRules from "../../components/MarkdownRules";
+// import MarkdownEditor from "../../components/MarkdownEditor";
 import generateDescription from "../../utils/genDesc";
 import { isValidUrl } from "../../utils/ValidateData";
+import MarkdownEditor from "../../components/Tiptap";
 
 const MAX_TAGS = 5;
 const MAX_IMAGE_SIZE_MB = 5;
@@ -40,10 +45,15 @@ function EditPost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [imagePublicId, setImagePublicId] = useState("");
+  const [initialImagePublicId, setInitialImagePublicId] = useState("");
   const [initialImageUrl, setInitialImageUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [formError, setFormError] = useState("");
   const [imagePreview, setImagePreview] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState("success");
   const [tags, setTags] = useState([]);
   const [status, setStatus] = useState("published");
 
@@ -81,14 +91,40 @@ function EditPost() {
       setImageUrl(post.imageUrl || "");
       setImagePreview(post.imageUrl || "");
       setInitialImageUrl(post.imageUrl || "");
+      setImagePublicId(post.imagePublicId || "");
+      setInitialImagePublicId(post.imagePublicId || "");
       setTags(post.tag || []);
       setStatus(post.status || "published");
     }
   }, [post]);
 
-  const clearImageStates = () => {
+  useEffect(() => {
+    if (error) {
+      const msg = error?.message || String(error);
+      setToastMessage(msg);
+      setToastType("error");
+      setShowToast(true);
+    } else if (formError) {
+      setToastMessage(formError);
+      setToastType("error");
+      setShowToast(true);
+    }
+  }, [error, formError]);
+
+  const clearImageStates = async () => {
+    try {
+      if (imagePublicId && imagePublicId !== initialImagePublicId) {
+        await deleteFromCloudinary(imagePublicId);
+        setToastMessage("Image removed");
+        setShowToast(true);
+      }
+    } catch (err) {
+      console.error("Failed to delete temp image on remove:", err);
+    }
+
     setImageUrl("");
     setImagePreview("");
+    setImagePublicId("");
   };
 
   const handleImageUrlChange = (e) => {
@@ -112,17 +148,27 @@ function EditPost() {
     setFormError("");
 
     try {
-      const url = await uploadToCloudinary(file);
-      setImageUrl(url);
-      setImagePreview(url);
+      const result = await uploadToCloudinary(file);
+      const secure = result?.secure_url || result?.url || null;
+      const publicId = result?.public_id || null;
+      setImageUrl(secure);
+      setImagePreview(secure);
+      setImagePublicId(publicId);
+      setToastMessage("Image uploaded");
+      setToastType("success");
+      setShowToast(true);
       setFormError("");
       e.target.value = null;
     } catch (err) {
       console.error(err);
       setFormError("Failed to upload image. Please try again.");
+      setToastMessage("Image upload failed");
+      setToastType("error");
+      setShowToast(true);
       // Revert to initial URL on failed upload
       setImageUrl(initialImageUrl);
       setImagePreview(initialImageUrl);
+      setImagePublicId(post?.imagePublicId || "");
     } finally {
       setIsUploading(false);
     }
@@ -174,6 +220,7 @@ function EditPost() {
         title: title.trim(),
         content: content,
         imageUrl: imageUrl || null,
+        imagePublicId: imagePublicId || null,
         description: generateDescription(content),
         author: user.displayName || user.email,
         tag: tags,
@@ -186,6 +233,24 @@ function EditPost() {
       });
     } catch (err) {
       setFormError(err.message || "Failed to update post");
+      try {
+        if (
+          imagePublicId &&
+          initialImagePublicId &&
+          imagePublicId !== initialImagePublicId
+        ) {
+          await deleteFromCloudinary(imagePublicId);
+          // revert to initial image
+          setImagePublicId(initialImagePublicId);
+          setImageUrl(initialImageUrl);
+          setImagePreview(initialImageUrl);
+        }
+      } catch (delErr) {
+        console.error(
+          "Failed to delete orphan image after update failure:",
+          delErr
+        );
+      }
       if (err.status === 403) {
         navigate("/dashboard", {
           replace: true,
@@ -220,11 +285,6 @@ function EditPost() {
                 {status.toUpperCase()}**
               </p>
             </div>
-            {(error?.message || formError) && (
-              <div className="p-3 text-sm text-red-500 bg-red-100 rounded">
-                {error?.message || formError}
-              </div>
-            )}
             {post?.status === "draft" && (
               <div className="p-3 text-sm text-yellow-700 bg-yellow-100 rounded">
                 You are editing a draft post. Publishing will make it visible to
@@ -344,7 +404,33 @@ function EditPost() {
                             : "cursor-pointer hover:bg-gray-200"
                         }`}
                       >
-                        {isUploading ? "Uploading..." : "Upload"}
+                        {isUploading ? (
+                          <span className="inline-flex items-center gap-2">
+                            <svg
+                              className="animate-spin h-4 w-4 text-amber-600"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                              ></path>
+                            </svg>
+                            Uploading...
+                          </span>
+                        ) : (
+                          "Upload"
+                        )}
                       </label>
                     </div>
                   </div>
@@ -382,6 +468,12 @@ function EditPost() {
                     </button>
                   </div>
                 )}
+                <Toast
+                  message={toastMessage}
+                  show={showToast}
+                  onClose={() => setShowToast(false)}
+                  type={toastType}
+                />
               </div>
 
               <MarkdownEditor
@@ -415,7 +507,7 @@ function EditPost() {
               </div>
             </form>
           </div>
-          <MarkdownRules />
+          {/* <MarkdownRules /> */}
         </div>
       </main>
     </>
