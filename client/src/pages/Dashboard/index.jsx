@@ -178,7 +178,7 @@ function DashBoard() {
         <td className="px-6 py-4">
           <div className="flex items-center gap-4 text-sm font-medium">
             <Link
-              className="text-amber-500 cursor-pointer hover:text-amber-700 transition"
+              className="text-amber-700 cursor-pointer hover:text-amber-900 transition"
               to={`/post/${blog._id}`}
             >
               View

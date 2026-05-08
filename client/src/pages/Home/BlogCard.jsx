@@ -18,7 +18,7 @@ function BlogCard({ blog }) {
       </p>
 
       <Link
-        className="inline-flex items-center gap-2 mt-4 text-sm font-medium text-amber-500 hover:underline"
+        className="inline-flex items-center gap-2 mt-4 text-sm font-medium text-amber-700 hover:underline"
         to={`/post/${postId}`}
         onClick={() => {
           window.scrollTo(0, 0);

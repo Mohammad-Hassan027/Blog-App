@@ -283,7 +283,7 @@ function CreatePost() {
                         {tag}
                         <button
                           type="button"
-                          className={`ml-1 text-amber-500 hover:text-amber-700 focus:outline-none ${
+                          className={`ml-1 text-amber-700 hover:text-amber-900 focus:outline-none ${
                             isActionActive
                               ? "opacity-50 cursor-not-allowed"
                               : ""

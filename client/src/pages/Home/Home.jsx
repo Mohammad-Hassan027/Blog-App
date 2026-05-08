@@ -53,7 +53,7 @@ function Home() {
                 </p>
                 <div className="mt-6">
                   <Link
-                    className="inline-flex items-center gap-2 text-sm font-medium text-amber-500 hover:underline"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-amber-700 hover:underline"
                     to={"/post/68d62e54ce51c6eec9bc3608"}
                     aria-label={`Read full post: The Rise of Quantum Computing`}
                   >
@@ -95,7 +95,7 @@ function Home() {
               Latest Posts
             </h2>
             <Link
-              className="flex items-center gap-1 mt-2 text-sm font-medium text-amber-500 md:mt-0 hover:underline"
+              className="flex items-center gap-1 mt-2 text-sm font-medium text-amber-700 md:mt-0 hover:underline"
               to={"/all-posts"}
             >
               View all posts

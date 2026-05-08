@@ -43,7 +43,7 @@ function Header() {
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-3">
             <svg
-              className="w-6 h-6 text-amber-500"
+              className="w-6 h-6 text-amber-700"
               fill="none"
               viewBox="0 0 48 48"
               xmlns="http://www.w3.org/2000/svg"
