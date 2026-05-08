@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://blog-app-azure-nu.vercel.app/sitemap.xml

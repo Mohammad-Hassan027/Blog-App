@@ -23,6 +23,7 @@ function BlogCard({ blog }) {
         onClick={() => {
           window.scrollTo(0, 0);
         }}
+        aria-label={`Read full post: ${title}`}
       >
         Read More
         <svg

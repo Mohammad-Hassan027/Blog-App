@@ -55,6 +55,7 @@ function Home() {
                   <Link
                     className="inline-flex items-center gap-2 text-sm font-medium text-amber-500 hover:underline"
                     to={"/post/68d62e54ce51c6eec9bc3608"}
+                    aria-label={`Read full post: The Rise of Quantum Computing`}
                   >
                     Read More
                     <svg

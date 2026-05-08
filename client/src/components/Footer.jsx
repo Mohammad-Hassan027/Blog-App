@@ -28,7 +28,7 @@ function Footer() {
             </p>
             <div className="flex gap-4">
               <Link
-                href="https://github.com/Mohammad-Hassan027"
+                to="https://github.com/Mohammad-Hassan027"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 transition-colors hover:text-amber-500"
@@ -37,7 +37,7 @@ function Footer() {
                 <FaGithub size={20} />
               </Link>
               <Link
-                href="https://twitter.com"
+                to="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 transition-colors hover:text-amber-500"
@@ -46,7 +46,7 @@ function Footer() {
                 <FaTwitter size={20} />
               </Link>
               <Link
-                href="https://www.linkedin.com/in/mohammad-hassan-shaikh-750791352?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                to="https://www.linkedin.com/in/mohammad-hassan-shaikh"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 transition-colors hover:text-amber-500"
@@ -118,7 +118,7 @@ function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#"
+                  to="#"
                   className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Technology
@@ -126,7 +126,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  to="#"
                   className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Programming
@@ -134,7 +134,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  to="#"
                   className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   AI & Machine Learning
@@ -142,7 +142,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  to="#"
                   className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Web Development
@@ -159,7 +159,7 @@ function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#"
+                  to="#"
                   className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Privacy Policy
@@ -167,7 +167,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  to="#"
                   className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Terms of Service
@@ -175,7 +175,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  to="#"
                   className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   Cookie Policy
@@ -183,7 +183,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  to="#"
                   className="text-sm text-gray-600 transition-colors hover:text-amber-500"
                 >
                   GDPR
@@ -199,7 +199,7 @@ function Footer() {
             <p className="text-sm text-gray-600">
               Photos: Unsplash —
               <Link
-                href="https://unsplash.com/photos/photo-1506765515384-028b60a970df"
+                to="https://unsplash.com/photos/photo-1506765515384-028b60a970df"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-1 underline"
@@ -208,7 +208,7 @@ function Footer() {
               </Link>
               ,
               <Link
-                href="https://unsplash.com/photos/photo-1518770660439-4636190af475"
+                to="https://unsplash.com/photos/photo-1518770660439-4636190af475"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-1 underline"
